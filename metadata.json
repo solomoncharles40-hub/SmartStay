@@ -1,0 +1,5 @@
+{
+  "name": "SmartStay",
+  "description": "An AI-powered hotel booking platform to find the best deals, with dynamic pricing, AI deal detection, and smart recommendations. This application provides a seamless, mobile-first user experience for searching, filtering, and booking accommodations worldwide.",
+  "requestFramePermissions": []
+}
