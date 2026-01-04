@@ -1,10 +1,14 @@
 
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, MapPinIcon, CalendarIcon, UserGroupIcon, AirplaneIcon, SeatIcon } from './icons/Icons';
-import type { FlightSearchParams } from '../types';
+import type { FlightSearchParams, AIFlightDeal } from '../types';
 import { AIFlightDeals } from './AIFlightDeals';
 
-export const FlightsSearchBar: React.FC = () => {
+interface FlightsSearchBarProps {
+    onBookAIFlightDeal: (deal: AIFlightDeal, params: FlightSearchParams) => void;
+}
+
+export const FlightsSearchBar: React.FC<FlightsSearchBarProps> = ({ onBookAIFlightDeal }) => {
   const [departure, setDeparture] = useState('');
   const [destination, setDestination] = useState('');
   const [departDate, setDepartDate] = useState('');
@@ -107,7 +111,10 @@ export const FlightsSearchBar: React.FC = () => {
         )}
         {submittedSearchParams && (
             <div className="mt-8">
-                <AIFlightDeals flightParams={submittedSearchParams} />
+                <AIFlightDeals 
+                    flightParams={submittedSearchParams} 
+                    onBookDeal={(deal) => onBookAIFlightDeal(deal, submittedSearchParams)} 
+                />
             </div>
         )}
     </div>

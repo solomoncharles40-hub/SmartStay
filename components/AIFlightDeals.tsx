@@ -6,13 +6,10 @@ import { SparklesIcon, PaperAirplaneIcon, ClockIcon, ArrowRightIcon } from './ic
 
 interface AIFlightDealsProps {
     flightParams: FlightSearchParams;
+    onBookDeal: (deal: AIFlightDeal) => void;
 }
 
-const FlightDealCard: React.FC<{ deal: AIFlightDeal }> = ({ deal }) => {
-    const handleBookNow = () => {
-        alert('This is a fictional, AI-generated flight deal and cannot be booked. It is for inspiration only!');
-    };
-
+const FlightDealCard: React.FC<{ deal: AIFlightDeal, onBook: () => void }> = ({ deal, onBook }) => {
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl dark:hover:shadow-blue-900/40 transition-shadow duration-300">
             <div className="p-5">
@@ -38,8 +35,8 @@ const FlightDealCard: React.FC<{ deal: AIFlightDeal }> = ({ deal }) => {
                          <ArrowRightIcon className="h-5 w-5" />
                          <span>{deal.stops} stop{deal.stops !== 1 && 's'}</span>
                     </div>
-                     <button onClick={handleBookNow} className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                        View Deal
+                     <button onClick={onBook} className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                        Book Deal
                     </button>
                 </div>
             </div>
@@ -69,7 +66,7 @@ const SkeletonCard: React.FC = () => (
     </div>
 );
 
-export const AIFlightDeals: React.FC<AIFlightDealsProps> = ({ flightParams }) => {
+export const AIFlightDeals: React.FC<AIFlightDealsProps> = ({ flightParams, onBookDeal }) => {
     const [deals, setDeals] = useState<AIFlightDeal[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -119,7 +116,7 @@ export const AIFlightDeals: React.FC<AIFlightDealsProps> = ({ flightParams }) =>
             {!isLoading && !error && deals.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {deals.map((deal, index) => (
-                        <FlightDealCard key={index} deal={deal} />
+                        <FlightDealCard key={index} deal={deal} onBook={() => onBookDeal(deal)} />
                     ))}
                 </div>
             )}

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import type { Hotel, SearchParams } from '../types';
+import type { Hotel, SearchParams, AIDeal } from '../types';
 import { HotelCard } from './HotelCard';
 import { FilterSidebar } from './FilterSidebar';
 import { AITripPlanner } from './AITripPlanner';
@@ -12,9 +12,10 @@ interface SearchResultsProps {
   hotels: Hotel[];
   onSelectHotel: (hotel: Hotel) => void;
   searchParams: SearchParams;
+  onBookAIDeal: (deal: AIDeal, searchParams: SearchParams, imageUrl: string) => void;
 }
 
-export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHotel, searchParams }) => {
+export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHotel, searchParams, onBookAIDeal }) => {
   const [filteredHotels, setFilteredHotels] = useState(hotels);
   const [activeTab, setActiveTab] = useState<'stays' | 'planner' | 'info' | 'ai-deals'>('stays');
 
@@ -69,7 +70,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHo
                 </div>
             </div>
         )}
-        {activeTab === 'ai-deals' && <AIGeneratedDeals searchParams={searchParams} />}
+        {activeTab === 'ai-deals' && <AIGeneratedDeals searchParams={searchParams} onBookDeal={onBookAIDeal} />}
         {activeTab === 'planner' && <AITripPlanner searchParams={searchParams} />}
         {activeTab === 'info' && <LocalInfo location={searchParams.location} />}
       </div>

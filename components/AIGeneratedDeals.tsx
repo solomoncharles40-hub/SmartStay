@@ -6,17 +6,16 @@ import { SparklesIcon } from './icons/Icons';
 
 interface AIGeneratedDealsProps {
     searchParams: SearchParams;
+    onBookDeal: (deal: AIDeal, searchParams: SearchParams, imageUrl: string) => void;
 }
 
-const DealCard: React.FC<{ deal: AIDeal; index: number }> = ({ deal, index }) => {
-    const handleBookNow = () => {
-        alert('This is a fictional, AI-generated deal and cannot be booked. It is for inspiration only!');
-    };
+const DealCard: React.FC<{ deal: AIDeal; index: number; onBook: () => void; }> = ({ deal, index, onBook }) => {
+    const imageUrl = `https://picsum.photos/seed/${deal.hotelName.replace(/\s/g, '')}${index}/800/600`;
     
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col hover:shadow-2xl dark:hover:shadow-blue-900/50 transition-shadow duration-300">
             <div className="relative">
-                <img src={`https://picsum.photos/seed/${deal.hotelName.replace(/\s/g, '')}${index}/800/600`} alt={deal.hotelName} className="w-full h-56 object-cover" />
+                <img src={imageUrl} alt={deal.hotelName} className="w-full h-56 object-cover" />
                 <div className="absolute top-2 right-2 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                     <SparklesIcon className="h-4 w-4" />
                     AI Special Offer
@@ -33,8 +32,8 @@ const DealCard: React.FC<{ deal: AIDeal; index: number }> = ({ deal, index }) =>
                         <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">${deal.price}</span>
                         <span className="text-sm text-gray-500 dark:text-gray-400"> / total</span>
                     </div>
-                    <button onClick={handleBookNow} className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                        View Deal
+                    <button onClick={onBook} className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        Book This Deal
                     </button>
                 </div>
             </div>
@@ -62,7 +61,7 @@ const SkeletonCard: React.FC = () => (
 );
 
 
-export const AIGeneratedDeals: React.FC<AIGeneratedDealsProps> = ({ searchParams }) => {
+export const AIGeneratedDeals: React.FC<AIGeneratedDealsProps> = ({ searchParams, onBookDeal }) => {
     const [deals, setDeals] = useState<AIDeal[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
@@ -86,6 +85,11 @@ export const AIGeneratedDeals: React.FC<AIGeneratedDealsProps> = ({ searchParams
 
         fetchDeals();
     }, [searchParams]);
+
+    const handleBook = (deal: AIDeal, index: number) => {
+        const imageUrl = `https://picsum.photos/seed/${deal.hotelName.replace(/\s/g, '')}${index}/800/600`;
+        onBookDeal(deal, searchParams, imageUrl);
+    }
 
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-blue-100 dark:border-blue-900/50">
@@ -112,7 +116,7 @@ export const AIGeneratedDeals: React.FC<AIGeneratedDealsProps> = ({ searchParams
             {!isLoading && !error && deals.length > 0 && (
                 <div className="grid grid-cols-1 gap-6">
                     {deals.map((deal, index) => (
-                        <DealCard key={index} deal={deal} index={index} />
+                        <DealCard key={index} deal={deal} index={index} onBook={() => handleBook(deal, index)} />
                     ))}
                 </div>
             )}

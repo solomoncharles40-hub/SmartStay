@@ -8,18 +8,21 @@ import { HotelDetail } from './components/HotelDetail';
 import { Chatbot } from './components/Chatbot';
 import { Booking } from './components/Booking';
 import { BookingConfirmation } from './components/BookingConfirmation';
+import { FlightBooking } from './components/FlightBooking';
+import { FlightBookingConfirmation } from './components/FlightBookingConfirmation';
 import { HomeIntro } from './components/HomeIntro';
 import { DealsSection } from './components/DealsSection';
-import type { Hotel, SearchParams, BookingDetails } from './types';
+import type { Hotel, SearchParams, BookingDetails, AIDeal, AIFlightDeal, FlightSearchParams, FlightBookingDetails } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation'>('home');
+  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'flightBooking' | 'flightConfirmation'>('home');
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
+  const [flightBookingDetails, setFlightBookingDetails] = useState<FlightBookingDetails | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Simulate a logged-in user
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -73,6 +76,7 @@ const App: React.FC = () => {
     setView('home');
     setSelectedHotel(null);
     setBookingDetails(null);
+    setFlightBookingDetails(null);
   }
 
   const handleInitiateBooking = (details: Omit<BookingDetails, 'nights' | 'totalPrice'>) => {
@@ -94,8 +98,65 @@ const App: React.FC = () => {
     setView('detail');
   };
 
+  const handleBookAIDeal = (deal: AIDeal, searchParams: SearchParams, imageUrl: string) => {
+    const { location, checkIn, checkOut, guests } = searchParams;
+    if (!checkIn || !checkOut) {
+        alert("Please select check-in and check-out dates to book an AI deal.");
+        return;
+    }
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
+    const nights = Math.max(1, Math.ceil(timeDiff / (1000 * 3600 * 24)));
+
+    const syntheticHotel: Hotel = {
+        id: -1 * Math.floor(Math.random() * 1000),
+        name: deal.hotelName,
+        city: location.split(',')[0],
+        country: location.split(',')[1] || '',
+        pricePerNight: deal.price / nights,
+        rating: 4.8,
+        reviews: Math.floor(Math.random() * 500) + 200,
+        amenities: ['WiFi', 'AI Curated', deal.dealHighlight],
+        imageUrl: imageUrl,
+        description: deal.description,
+        maxGuests: parseInt(guests, 10),
+    };
+
+    setBookingDetails({
+        hotel: syntheticHotel,
+        checkIn,
+        checkOut,
+        guests: parseInt(guests, 10),
+        nights,
+        totalPrice: deal.price,
+    });
+    setView('booking');
+  };
+
+  const handleBookAIFlightDeal = (deal: AIFlightDeal, flightParams: FlightSearchParams) => {
+    const travelers = parseInt(flightParams.travelers, 10);
+    setFlightBookingDetails({
+      flight: deal,
+      flightParams,
+      totalPrice: deal.price * travelers,
+    });
+    setView('flightBooking');
+  };
+
+  const handleConfirmFlightBooking = () => {
+    setView('flightConfirmation');
+  };
+
+  const handleCancelFlightBooking = () => {
+    setFlightBookingDetails(null);
+    setView('home');
+  };
+
   const handleReturnHome = () => {
     setBookingDetails(null);
+    setFlightBookingDetails(null);
     setSelectedHotel(null);
     setView('home');
   };
@@ -128,18 +189,22 @@ const App: React.FC = () => {
 
     switch (view) {
       case 'results':
-        return <SearchResults hotels={searchResults} onSelectHotel={handleSelectHotel} searchParams={searchParams!} />;
+        return <SearchResults hotels={searchResults} onSelectHotel={handleSelectHotel} searchParams={searchParams!} onBookAIDeal={handleBookAIDeal} />;
       case 'detail':
         return selectedHotel && <HotelDetail hotel={selectedHotel} onBack={handleBackToResults} onBookNow={handleInitiateBooking} />;
       case 'booking':
         return bookingDetails && <Booking details={bookingDetails} onConfirm={handleConfirmBooking} onBack={handleCancelBooking} isLoggedIn={isLoggedIn} theme={theme} />;
       case 'confirmation':
         return bookingDetails && <BookingConfirmation details={bookingDetails} onGoHome={handleReturnHome} />;
+      case 'flightBooking':
+        return flightBookingDetails && <FlightBooking details={flightBookingDetails} onConfirm={handleConfirmFlightBooking} onBack={handleCancelFlightBooking} isLoggedIn={isLoggedIn} theme={theme} />;
+      case 'flightConfirmation':
+        return flightBookingDetails && <FlightBookingConfirmation details={flightBookingDetails} onGoHome={handleReturnHome} />;
       case 'home':
       default:
         return (
             <>
-              <Hero onSearch={handleSearch} />
+              <Hero onSearch={handleSearch} onBookAIFlightDeal={handleBookAIFlightDeal} />
               <div className="my-16 space-y-16">
                   <HomeIntro />
                   <DealsSection onDealClick={handleDealClick} />

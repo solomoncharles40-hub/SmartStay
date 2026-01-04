@@ -76,3 +76,9 @@ export interface AIFlightDeal {
   stops: number;
   flightDuration: string;
 }
+
+export interface FlightBookingDetails {
+  flight: AIFlightDeal;
+  flightParams: FlightSearchParams;
+  totalPrice: number;
+}
