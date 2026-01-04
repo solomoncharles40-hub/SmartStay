@@ -111,128 +111,133 @@ const CheckoutForm: React.FC<{ details: BookingDetails; onConfirm: () => void; i
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Secure Payment</h2>
             
-            <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
-                <button
-                    onClick={() => setPaymentMethod('card')}
-                    className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'card' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'}`}
-                >
-                    Pay with Card
-                </button>
-                <button
-                    onClick={() => setPaymentMethod('paypal')}
-                    className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'paypal' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'}`}
-                >
-                    Pay with PayPal
-                </button>
-            </div>
-            
-            {paymentMethod === 'card' && (
-                <form onSubmit={handleStripeSubmit} className="animate-fade-in">
-                    <div className="space-y-4">
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
-                            <input type="text" id="name" value={formState.name} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
-                        </div>
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                            <input type="email" id="email" value={formState.email} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Card Details</label>
-                            <div className="mt-1 p-3 border border-gray-300 rounded-md shadow-sm min-h-[50px] flex items-center dark:border-gray-600">
-                                {stripe && elements ? (
-                                    <div className="w-full">
-                                        <CardElement options={cardElementOptions} />
-                                    </div>
-                                ) : (
-                                    <div className="w-full flex items-center gap-3 animate-pulse">
-                                        <div className="w-10 h-7 bg-gray-200 dark:bg-gray-600 rounded-md"></div>
-                                        <div className="flex-grow h-4 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        {isLoggedIn && (
-                            <div className="flex items-center pt-2">
-                                <input
-                                    id="save-card"
-                                    name="save-card"
-                                    type="checkbox"
-                                    checked={saveCard}
-                                    onChange={(e) => setSaveCard(e.target.checked)}
-                                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-500"
-                                />
-                                <label htmlFor="save-card" className="ml-2 block text-sm text-gray-800 dark:text-gray-300">
-                                    Save this card for future payments
-                                </label>
-                            </div>
-                        )}
+             {paymentStatus === 'successful' ? (
+                <div className="text-center py-8 animate-fade-in">
+                    <CheckCircleIcon className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Payment Successful!</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2">Please wait while we confirm your booking.</p>
+                </div>
+            ) : (
+                <>
+                    <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                        <button
+                            onClick={() => setPaymentMethod('card')}
+                            className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'card' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'}`}
+                        >
+                            Pay with Card
+                        </button>
+                        <button
+                            onClick={() => setPaymentMethod('paypal')}
+                            className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'paypal' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'}`}
+                        >
+                            Pay with PayPal
+                        </button>
                     </div>
-                    
+
                     {paymentStatus === 'failed' && error && (
-                        <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2 dark:bg-red-900/30 dark:text-red-300">
+                        <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2 dark:bg-red-900/30 dark:text-red-300 animate-fade-in">
                             <ExclamationCircleIcon className="h-5 w-5 flex-shrink-0" />
                             <span className="text-sm">{error}</span>
                         </div>
                     )}
                     
-                    <button
-                        type="submit"
-                        disabled={paymentStatus === 'processing' || paymentStatus === 'successful' || !stripe}
-                        className={`w-full mt-6 text-white font-bold py-3 px-4 rounded-lg transition-colors text-lg flex items-center justify-center gap-2 disabled:bg-gray-400 ${getButtonClass()}`}
-                    >
-                       {paymentStatus === 'processing' ? (
-                           <>
-                               <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white" aria-hidden="true"></div>
-                               <span>Processing...</span>
-                           </>
-                       ) : paymentStatus === 'successful' ? (
-                           <>
-                               <CheckCircleIcon className="h-6 w-6" />
-                               <span>Payment Successful</span>
-                           </>
-                       ) : (
-                           <>
-                               <LockClosedIcon className="h-5 w-5" aria-hidden="true" />
-                               <span>Pay with Card (${details.totalPrice})</span>
-                           </>
-                       )}
-                    </button>
-                </form>
-            )}
-
-            {paymentMethod === 'paypal' && (
-                <div className="animate-fade-in">
-                    {isPaypalLoading ? (
-                         <div className="space-y-3 animate-pulse pt-4">
-                            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-                        </div>
-                     ) : (
-                        <PayPalButtons
-                            style={{ layout: "vertical", color: "blue" }}
-                            disabled={paymentStatus === 'processing' || paymentStatus === 'successful'}
-                            createOrder={(data, actions) => {
-                                setError(null);
-                                setPaymentStatus('idle');
-                                return actions.order.create({
-                                    purchase_units: [{
-                                        description: `${details.hotel.name} - ${details.nights} nights`,
-                                        amount: {
-                                            value: details.totalPrice.toString(),
-                                        },
-                                    }],
-                                });
-                            }}
-                            onApprove={handlePaypalApprove}
-                            onError={(err) => {
-                                console.error("PayPal Button Error:", err);
-                                setError("An error occurred with PayPal. Please check your details and try again.");
-                                setPaymentStatus('failed');
-                            }}
-                        />
+                    {paymentMethod === 'card' && (
+                        <form onSubmit={handleStripeSubmit} className="animate-fade-in">
+                            <div className="space-y-4">
+                                <div>
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                                    <input type="text" id="name" value={formState.name} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
+                                </div>
+                                <div>
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                    <input type="email" id="email" value={formState.email} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Card Details</label>
+                                    <div className="mt-1 p-3 border border-gray-300 rounded-md shadow-sm min-h-[50px] flex items-center dark:border-gray-600">
+                                        {stripe && elements ? (
+                                            <div className="w-full">
+                                                <CardElement options={cardElementOptions} />
+                                            </div>
+                                        ) : (
+                                            <div className="w-full flex items-center gap-3 animate-pulse">
+                                                <div className="w-10 h-7 bg-gray-200 dark:bg-gray-600 rounded-md"></div>
+                                                <div className="flex-grow h-4 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                {isLoggedIn && (
+                                    <div className="flex items-center pt-2">
+                                        <input
+                                            id="save-card"
+                                            name="save-card"
+                                            type="checkbox"
+                                            checked={saveCard}
+                                            onChange={(e) => setSaveCard(e.target.checked)}
+                                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-500"
+                                        />
+                                        <label htmlFor="save-card" className="ml-2 block text-sm text-gray-800 dark:text-gray-300">
+                                            Save this card for future payments
+                                        </label>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <button
+                                type="submit"
+                                disabled={paymentStatus === 'processing' || paymentStatus === 'successful' || !stripe}
+                                className={`w-full mt-6 text-white font-bold py-3 px-4 rounded-lg transition-colors text-lg flex items-center justify-center gap-2 disabled:bg-gray-400 ${getButtonClass()}`}
+                            >
+                               {paymentStatus === 'processing' ? (
+                                   <>
+                                       <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white" aria-hidden="true"></div>
+                                       <span>Processing...</span>
+                                   </>
+                               ) : (
+                                   <>
+                                       <LockClosedIcon className="h-5 w-5" aria-hidden="true" />
+                                       <span>Pay with Card (${details.totalPrice})</span>
+                                   </>
+                               )}
+                            </button>
+                        </form>
                     )}
-                </div>
+
+                    {paymentMethod === 'paypal' && (
+                        <div className="animate-fade-in">
+                            {isPaypalLoading ? (
+                                 <div className="space-y-3 animate-pulse pt-4">
+                                    <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                                    <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                                </div>
+                             ) : (
+                                <PayPalButtons
+                                    style={{ layout: "vertical", color: "blue" }}
+                                    disabled={paymentStatus === 'processing' || paymentStatus === 'successful'}
+                                    createOrder={(data, actions) => {
+                                        setError(null);
+                                        setPaymentStatus('idle');
+                                        return actions.order.create({
+                                            purchase_units: [{
+                                                description: `${details.hotel.name} - ${details.nights} nights`,
+                                                amount: {
+                                                    value: details.totalPrice.toString(),
+                                                },
+                                            }],
+                                        });
+                                    }}
+                                    onApprove={handlePaypalApprove}
+                                    onError={(err) => {
+                                        console.error("PayPal Button Error:", err);
+                                        setError("An error occurred with PayPal. Please check your details and try again.");
+                                        setPaymentStatus('failed');
+                                    }}
+                                />
+                            )}
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
