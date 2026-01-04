@@ -36,91 +36,75 @@ export const FlightsSearchBar: React.FC = () => {
 
   return (
     <div className="w-full">
-        <form onSubmit={handleSubmit} className="w-full">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
-            
-            {/* Departure and Destination */}
-            <div className="md:col-span-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className={inputWrapperStyles}>
-                    <AirplaneIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                    type="text"
-                    value={departure}
-                    onChange={(e) => setDeparture(e.target.value)}
-                    placeholder="Departure"
-                    className={inputBaseStyles}
-                    />
-                </div>
-                <div className={inputWrapperStyles}>
-                    <MapPinIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                    type="text"
-                    value={destination}
-                    onChange={(e) => setDestination(e.target.value)}
-                    placeholder="Destination"
-                    className={inputBaseStyles}
-                    />
-                </div>
+        <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2 items-center">
+            <div className={inputWrapperStyles}>
+                <AirplaneIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                type="text"
+                value={departure}
+                onChange={(e) => setDeparture(e.target.value)}
+                placeholder="Departure"
+                className={inputBaseStyles}
+                />
             </div>
-            
-            {/* Dates */}
-            <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className={inputWrapperStyles}>
-                    <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                    type="date"
-                    value={departDate}
-                    onChange={(e) => setDepartDate(e.target.value)}
-                    className={inputBaseStyles + " text-gray-500 dark:text-gray-400"}
-                    />
-                </div>
-                <div className={inputWrapperStyles}>
-                    <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                    type="date"
-                    value={returnDate}
-                    onChange={(e) => setReturnDate(e.target.value)}
-                    className={inputBaseStyles + " text-gray-500 dark:text-gray-400"}
-                    />
-                </div>
+            <div className={inputWrapperStyles}>
+                <MapPinIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                type="text"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                placeholder="Destination"
+                className={inputBaseStyles}
+                />
             </div>
-
-            {/* Travelers and Class */}
-            <div className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className={inputWrapperStyles}>
-                    <UserGroupIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <input
-                    type="number"
-                    min="1"
-                    value={travelers}
-                    onChange={(e) => setTravelers(e.target.value)}
-                    className={inputBaseStyles}
-                    />
-                </div>
-                <div className={inputWrapperStyles}>
-                    <SeatIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <select
-                        value={flightClass}
-                        onChange={(e) => setFlightClass(e.target.value)}
-                        className={inputBaseStyles + " appearance-none"}
-                    >
-                        <option>Economy</option>
-                        <option>Premium</option>
-                        <option>Business</option>
-                        <option>First</option>
-                    </select>
-                </div>
+            <div className={inputWrapperStyles}>
+                <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                type="date"
+                value={departDate}
+                onChange={(e) => setDepartDate(e.target.value)}
+                className={inputBaseStyles + " text-gray-500 dark:text-gray-400"}
+                />
             </div>
-
-            {/* Search Button */}
+            <div className={inputWrapperStyles}>
+                <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                type="date"
+                value={returnDate}
+                onChange={(e) => setReturnDate(e.target.value)}
+                className={inputBaseStyles + " text-gray-500 dark:text-gray-400"}
+                />
+            </div>
+            <div className={inputWrapperStyles}>
+                <UserGroupIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                type="number"
+                min="1"
+                value={travelers}
+                onChange={(e) => setTravelers(e.target.value)}
+                className={inputBaseStyles}
+                />
+            </div>
+            <div className={inputWrapperStyles}>
+                <SeatIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <select
+                    value={flightClass}
+                    onChange={(e) => setFlightClass(e.target.value)}
+                    className={inputBaseStyles + " appearance-none"}
+                >
+                    <option>Economy</option>
+                    <option>Premium</option>
+                    <option>Business</option>
+                    <option>First</option>
+                </select>
+            </div>
             <button
                 type="submit"
-                className="md:col-span-2 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 text-lg"
+                className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 sm:col-span-2 lg:col-span-1"
             >
                 <MagnifyingGlassIcon className="h-6 w-6" />
-                <span>Search</span>
+                <span className="lg:hidden">Search</span>
             </button>
-        </div>
         </form>
         {isLoading && (
             <div className="mt-4 text-center">
