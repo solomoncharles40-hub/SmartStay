@@ -1,6 +1,6 @@
 
-import { GoogleGenAI, GenerateContentResponse, GroundingChunk } from "@google/genai";
-import type { Hotel, FlightSearchParams } from '../types';
+import { GoogleGenAI, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
+import type { Hotel, FlightSearchParams, SearchParams, AIDeal } from '../types';
 
 // Lazily initialize the AI client to prevent app crash if API key is missing on load.
 let ai: GoogleGenAI | null = null;
@@ -192,5 +192,47 @@ Keep the tone helpful and engaging.`;
     } catch (error) {
         console.error("Error getting flight info:", error);
         return "I'm sorry, I can't search for flights right now, but I can help you find information about your destination!";
+    }
+};
+
+export const generateAIDeals = async (params: SearchParams): Promise<AIDeal[]> => {
+    const aiClient = getAiClient();
+    if (!aiClient) return [];
+
+    const prompt = `You are a creative travel agent for SmartStay. Based on the user's search for a hotel in ${params.location} for ${params.guests} guests, generate 3 unique, compelling, and fictional hotel deals. The deals should sound exclusive and exciting. Provide a catchy hotel name, a short enticing description, a realistic price for the entire fictional stay, and a short "deal highlight" for each.`;
+
+    try {
+        const response = await aiClient.models.generateContent({
+            model: 'gemini-3-flash-preview',
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        deals: {
+                            type: Type.ARRAY,
+                            items: {
+                                type: Type.OBJECT,
+                                properties: {
+                                    hotelName: { type: Type.STRING },
+                                    description: { type: Type.STRING },
+                                    price: { type: Type.INTEGER },
+                                    dealHighlight: { type: Type.STRING },
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        const jsonStr = response.text.trim();
+        const parsed = JSON.parse(jsonStr);
+        return parsed.deals as AIDeal[];
+
+    } catch (error) {
+        console.error("Error generating AI deals:", error);
+        return [];
     }
 };

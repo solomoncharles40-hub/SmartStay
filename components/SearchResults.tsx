@@ -5,6 +5,8 @@ import { HotelCard } from './HotelCard';
 import { FilterSidebar } from './FilterSidebar';
 import { AITripPlanner } from './AITripPlanner';
 import { LocalInfo } from './LocalInfo';
+import { AIGeneratedDeals } from './AIGeneratedDeals';
+import { SparklesIcon } from './icons/Icons';
 
 interface SearchResultsProps {
   hotels: Hotel[];
@@ -14,7 +16,7 @@ interface SearchResultsProps {
 
 export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHotel, searchParams }) => {
   const [filteredHotels, setFilteredHotels] = useState(hotels);
-  const [activeTab, setActiveTab] = useState<'stays' | 'planner' | 'info'>('stays');
+  const [activeTab, setActiveTab] = useState<'stays' | 'planner' | 'info' | 'ai-deals'>('stays');
 
   useEffect(() => {
     setFilteredHotels(hotels);
@@ -41,6 +43,11 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHo
                 <button onClick={() => setActiveTab('stays')} className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'stays' ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500'}`}>
                 Available Stays ({filteredHotels.length})
                 </button>
+                 <button onClick={() => setActiveTab('ai-deals')} className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'ai-deals' ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500'}`}>
+                    <span className="flex items-center gap-1">
+                        AI-Generated Deals <SparklesIcon className="h-4 w-4 text-yellow-500" />
+                    </span>
+                </button>
                 <button onClick={() => setActiveTab('info')} className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'info' ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-500'}`}>
                 Discover {searchParams.location}
                 </button>
@@ -62,6 +69,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHo
                 </div>
             </div>
         )}
+        {activeTab === 'ai-deals' && <AIGeneratedDeals searchParams={searchParams} />}
         {activeTab === 'planner' && <AITripPlanner searchParams={searchParams} />}
         {activeTab === 'info' && <LocalInfo location={searchParams.location} />}
       </div>

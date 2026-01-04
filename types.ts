@@ -61,3 +61,10 @@ export interface BookingDetails {
   nights: number;
   totalPrice: number;
 }
+
+export interface AIDeal {
+  hotelName: string;
+  description: string;
+  price: number;
+  dealHighlight: string;
+}
