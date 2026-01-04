@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
-import type { Hotel, FlightSearchParams, SearchParams, AIDeal } from '../types';
+import type { Hotel, FlightSearchParams, SearchParams, AIDeal, AIFlightDeal } from '../types';
 
 // Lazily initialize the AI client to prevent app crash if API key is missing on load.
 let ai: GoogleGenAI | null = null;
@@ -170,30 +170,49 @@ export const planComplexItinerary = async (request: string): Promise<string> => 
     }
 };
 
-export const getFlightInfo = async (params: FlightSearchParams): Promise<string> => {
+export const generateAIFlightDeals = async (params: FlightSearchParams): Promise<AIFlightDeal[]> => {
     const aiClient = getAiClient();
-    if (!aiClient) return "I'm sorry, I can't provide flight information right now as the AI service is unavailable.";
+    if (!aiClient) return [];
+
+    const prompt = `You are a creative travel deal finder for SmartStay. Based on the user's search for a flight from ${params.departure} to ${params.destination}, generate 3 unique, compelling, and fictional flight deals. The deals should represent different airlines and value propositions (e.g., one budget, one comfort, one direct). Provide a realistic airline name, a round-trip price, a catchy "deal highlight", the number of stops, and a flight duration for each.`;
 
     try {
-        const prompt = `A user is searching for a ${params.flightClass} flight for ${params.travelers} traveler(s) from ${params.departure} to ${params.destination}, departing on ${params.departDate || 'an unspecified date'} and returning on ${params.returnDate || 'an unspecified date'}.
-        
-Our flight booking feature is not yet implemented. 
-Provide a friendly and helpful message that:
-1. Acknowledges their specific search query.
-2. Informs them that direct booking isn't available yet.
-3. Offers to provide helpful travel information instead, like major airlines on that route, or tips for finding the best time to book.
-
-Keep the tone helpful and engaging.`;
         const response = await aiClient.models.generateContent({
             model: 'gemini-3-flash-preview',
             contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        deals: {
+                            type: Type.ARRAY,
+                            items: {
+                                type: Type.OBJECT,
+                                properties: {
+                                    airline: { type: Type.STRING },
+                                    price: { type: Type.INTEGER },
+                                    dealHighlight: { type: Type.STRING },
+                                    stops: { type: Type.INTEGER },
+                                    flightDuration: { type: Type.STRING }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         });
-        return response.text;
+        
+        const jsonStr = response.text.trim();
+        const parsed = JSON.parse(jsonStr);
+        return parsed.deals as AIFlightDeal[];
+
     } catch (error) {
-        console.error("Error getting flight info:", error);
-        return "I'm sorry, I can't search for flights right now, but I can help you find information about your destination!";
+        console.error("Error generating AI flight deals:", error);
+        return [];
     }
 };
+
 
 export const generateAIDeals = async (params: SearchParams): Promise<AIDeal[]> => {
     const aiClient = getAiClient();

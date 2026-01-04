@@ -68,3 +68,11 @@ export interface AIDeal {
   price: number;
   dealHighlight: string;
 }
+
+export interface AIFlightDeal {
+  airline: string;
+  price: number;
+  dealHighlight: string;
+  stops: number;
+  flightDuration: string;
+}

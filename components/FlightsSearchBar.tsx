@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, MapPinIcon, CalendarIcon, UserGroupIcon, AirplaneIcon, SeatIcon } from './icons/Icons';
-import { getFlightInfo } from '../services/geminiService';
+import type { FlightSearchParams } from '../types';
+import { AIFlightDeals } from './AIFlightDeals';
 
 export const FlightsSearchBar: React.FC = () => {
   const [departure, setDeparture] = useState('');
@@ -10,25 +11,18 @@ export const FlightsSearchBar: React.FC = () => {
   const [returnDate, setReturnDate] = useState('');
   const [travelers, setTravelers] = useState('1');
   const [flightClass, setFlightClass] = useState('Economy');
-  const [isLoading, setIsLoading] = useState(false);
-  const [aiResponse, setAiResponse] = useState('');
+  const [submittedSearchParams, setSubmittedSearchParams] = useState<FlightSearchParams | null>(null);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!departure || !destination) {
-        setAiResponse('Please enter a departure and destination airport.');
+        setError('Please enter a departure and destination airport.');
+        setSubmittedSearchParams(null);
         return;
     }
-    setIsLoading(true);
-    setAiResponse('');
-    try {
-        const response = await getFlightInfo({ departure, destination, departDate, returnDate, travelers, flightClass });
-        setAiResponse(response);
-    } catch (error) {
-        setAiResponse("Sorry, I encountered an error while fetching flight information.");
-    } finally {
-        setIsLoading(false);
-    }
+    setError('');
+    setSubmittedSearchParams({ departure, destination, departDate, returnDate, travelers, flightClass });
   };
   
   const inputBaseStyles = "w-full pl-10 pr-3 py-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 transition-colors duration-300";
@@ -106,15 +100,14 @@ export const FlightsSearchBar: React.FC = () => {
                 <span className="lg:hidden">Search</span>
             </button>
         </form>
-        {isLoading && (
-            <div className="mt-4 text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-                <p className="text-gray-600 dark:text-gray-300 mt-2">Checking flight information...</p>
+        {error && (
+            <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/50 rounded-lg text-red-700 dark:text-red-300 text-center">
+                {error}
             </div>
         )}
-        {aiResponse && (
-            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/50 rounded-lg border border-blue-200 dark:border-blue-800 text-gray-700 dark:text-gray-200">
-                <p>{aiResponse}</p>
+        {submittedSearchParams && (
+            <div className="mt-8">
+                <AIFlightDeals flightParams={submittedSearchParams} />
             </div>
         )}
     </div>
