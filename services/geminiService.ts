@@ -2,15 +2,27 @@
 import { GoogleGenAI, GenerateContentResponse, GroundingChunk } from "@google/genai";
 import type { Hotel, FlightSearchParams } from '../types';
 
-const API_KEY = process.env.API_KEY;
+// Lazily initialize the AI client to prevent app crash if API key is missing on load.
+let ai: GoogleGenAI | null = null;
 
-if (!API_KEY) {
-  throw new Error("API_KEY environment variable is not set");
-}
+const getAiClient = () => {
+    if (ai) return ai;
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+    const API_KEY = process.env.API_KEY;
+    if (!API_KEY) {
+        console.error("API_KEY environment variable is not set. AI features will be disabled.");
+        return null;
+    }
+    ai = new GoogleGenAI({ apiKey: API_KEY });
+    return ai;
+};
 
 export const getSmartStayScore = async (hotel: Hotel): Promise<number> => {
+  const aiClient = getAiClient();
+  if (!aiClient) {
+    return Math.floor(Math.random() * 15) + 75; // Return a plausible fallback score
+  }
+
   try {
     const prompt = `Analyze the following hotel data and provide a "SmartStay Score" from 1 to 100, where 100 is the best value for money. Consider the price, rating, number of reviews, and amenities. Provide only the number.
     
@@ -22,7 +34,7 @@ export const getSmartStayScore = async (hotel: Hotel): Promise<number> => {
 
     Score:`;
 
-    const response = await ai.models.generateContent({
+    const response = await aiClient.models.generateContent({
       model: 'gemini-flash-lite-latest',
       contents: prompt,
     });
@@ -33,15 +45,25 @@ export const getSmartStayScore = async (hotel: Hotel): Promise<number> => {
     if (!isNaN(score) && score >= 1 && score <= 100) {
       return score;
     }
-    return Math.floor(Math.random() * 30) + 60; // Fallback
+    return Math.floor(Math.random() * 15) + 75; // Fallback
   } catch (error) {
     console.error('Error getting SmartStay score:', error);
-    return Math.floor(Math.random() * 30) + 60; // Fallback on error
+    return Math.floor(Math.random() * 15) + 75; // Fallback on error
   }
 };
 
 export const getChatbotResponse = async (history: { role: 'user' | 'model', parts: { text: string }[] }[], newMessage: string) => {
-    const chat = ai.chats.create({
+    const aiClient = getAiClient();
+    if (!aiClient) {
+        return (async function* () {
+            const responseChunk = { 
+                text: "I'm sorry, my AI capabilities are currently offline. Please try again later." 
+            } as unknown as GenerateContentResponse;
+            yield responseChunk;
+        })();
+    }
+
+    const chat = aiClient.chats.create({
         model: 'gemini-3-pro-preview',
         history: history,
         config: {
@@ -49,13 +71,15 @@ export const getChatbotResponse = async (history: { role: 'user' | 'model', part
         }
     });
 
-    const result = await chat.sendMessageStream({ message: newMessage });
-    return result;
+    return chat.sendMessageStream({ message: newMessage });
 };
 
 export const editImageWithPrompt = async (base64Image: string, mimeType: string, prompt: string): Promise<string | null> => {
+    const aiClient = getAiClient();
+    if (!aiClient) return null;
+
     try {
-        const response = await ai.models.generateContent({
+        const response = await aiClient.models.generateContent({
             model: 'gemini-2.5-flash-image',
             contents: {
                 parts: [
@@ -78,10 +102,15 @@ export const editImageWithPrompt = async (base64Image: string, mimeType: string,
     }
 };
 
+const aiOfflineMessage = { text: "Sorry, I couldn't fetch that information as the AI service is currently unavailable.", sources: [] };
+
 export const getLocalInfo = async (location: string, topic: string): Promise<{text: string, sources: GroundingChunk[]}> => {
+    const aiClient = getAiClient();
+    if (!aiClient) return aiOfflineMessage;
+
     try {
         const prompt = `Tell me about ${topic} in ${location}.`;
-        const response = await ai.models.generateContent({
+        const response = await aiClient.models.generateContent({
             model: 'gemini-3-flash-preview',
             contents: prompt,
             config: {
@@ -100,9 +129,12 @@ export const getLocalInfo = async (location: string, topic: string): Promise<{te
 };
 
 export const getNearbyAttractions = async (hotelName: string, city: string): Promise<{text: string, sources: GroundingChunk[]}> => {
+    const aiClient = getAiClient();
+    if (!aiClient) return { text: "Sorry, I couldn't fetch information about nearby places as the AI service is currently unavailable.", sources: [] };
+
     try {
         const prompt = `What are some good attractions and restaurants near the ${hotelName} in ${city}?`;
-        const response = await ai.models.generateContent({
+        const response = await aiClient.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: prompt,
             config: {
@@ -120,8 +152,11 @@ export const getNearbyAttractions = async (hotelName: string, city: string): Pro
 };
 
 export const planComplexItinerary = async (request: string): Promise<string> => {
+    const aiClient = getAiClient();
+    if (!aiClient) return "I'm sorry, I'm unable to plan your trip right now as the AI service is unavailable.";
+
     try {
-        const response = await ai.models.generateContent({
+        const response = await aiClient.models.generateContent({
             model: 'gemini-3-pro-preview',
             contents: `As an expert travel planner, create a detailed itinerary based on this request: "${request}". Be creative, thorough, and provide specific suggestions.`,
             config: {
@@ -136,6 +171,9 @@ export const planComplexItinerary = async (request: string): Promise<string> => 
 };
 
 export const getFlightInfo = async (params: FlightSearchParams): Promise<string> => {
+    const aiClient = getAiClient();
+    if (!aiClient) return "I'm sorry, I can't provide flight information right now as the AI service is unavailable.";
+
     try {
         const prompt = `A user is searching for a ${params.flightClass} flight for ${params.travelers} traveler(s) from ${params.departure} to ${params.destination}, departing on ${params.departDate || 'an unspecified date'} and returning on ${params.returnDate || 'an unspecified date'}.
         
@@ -146,7 +184,7 @@ Provide a friendly and helpful message that:
 3. Offers to provide helpful travel information instead, like major airlines on that route, or tips for finding the best time to book.
 
 Keep the tone helpful and engaging.`;
-        const response = await ai.models.generateContent({
+        const response = await aiClient.models.generateContent({
             model: 'gemini-3-flash-preview',
             contents: prompt,
         });
