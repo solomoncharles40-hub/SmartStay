@@ -79,11 +79,11 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({ initialImageUrl }) => 
     };
 
     return (
-        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Have Fun with AI Image Editing!</h3>
-            <p className="text-sm text-gray-600 mb-4">Try prompts like "Add a retro filter", "Make it look like a watercolor painting", or "Add a cute dog in the foreground".</p>
+        <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Have Fun with AI Image Editing!</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Try prompts like "Add a retro filter", "Make it look like a watercolor painting", or "Add a cute dog in the foreground".</p>
             
-            <div className="relative aspect-video bg-gray-200 rounded-lg overflow-hidden mb-4">
+            <div className="relative aspect-video bg-gray-200 dark:bg-gray-800 rounded-lg overflow-hidden mb-4">
                 <img src={image} alt="Editable hotel" className="w-full h-full object-cover" />
                 {isLoading && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -98,7 +98,7 @@ export const ImageEditor: React.FC<ImageEditorProps> = ({ initialImageUrl }) => 
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Enter an editing prompt..."
-                    className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
                 />
                 <button
                     onClick={handleSubmit}

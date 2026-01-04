@@ -8,6 +8,8 @@ import { HotelDetail } from './components/HotelDetail';
 import { Chatbot } from './components/Chatbot';
 import { Booking } from './components/Booking';
 import { BookingConfirmation } from './components/BookingConfirmation';
+import { HomeIntro } from './components/HomeIntro';
+import { DealsSection } from './components/DealsSection';
 import type { Hotel, SearchParams, BookingDetails } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
@@ -18,6 +20,28 @@ const App: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Simulate a logged-in user
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        return 'dark';
+    }
+    return 'light';
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+      setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
 
   const handleSearch = useCallback((params: SearchParams) => {
     setIsLoading(true);
@@ -80,7 +104,7 @@ const App: React.FC = () => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center h-[calc(100vh-200px)]">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-600 dark:border-blue-400"></div>
         </div>
       );
     }
@@ -91,20 +115,26 @@ const App: React.FC = () => {
       case 'detail':
         return selectedHotel && <HotelDetail hotel={selectedHotel} onBack={handleBackToResults} onBookNow={handleInitiateBooking} />;
       case 'booking':
-        return bookingDetails && <Booking details={bookingDetails} onConfirm={handleConfirmBooking} onBack={handleCancelBooking} />;
+        return bookingDetails && <Booking details={bookingDetails} onConfirm={handleConfirmBooking} onBack={handleCancelBooking} isLoggedIn={isLoggedIn} />;
       case 'confirmation':
         return bookingDetails && <BookingConfirmation details={bookingDetails} onGoHome={handleReturnHome} />;
       case 'home':
       default:
         return (
-            <Hero onSearch={handleSearch} />
+            <>
+              <Hero onSearch={handleSearch} />
+              <div className="my-16 space-y-16">
+                  <HomeIntro />
+                  <DealsSection />
+              </div>
+            </>
         );
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      <Header onLogoClick={handleLogoClick} />
+      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} />
       <main className="flex-grow container mx-auto px-4 py-8">
         {renderView()}
       </main>

@@ -28,7 +28,7 @@ export const NearbyAttractions: React.FC<NearbyAttractionsProps> = ({ hotelName,
         return (
             <div className="mt-6 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-                <p className="text-gray-600 mt-2">Finding nearby places...</p>
+                <p className="text-gray-600 dark:text-gray-300 mt-2">Finding nearby places...</p>
             </div>
         );
     }
@@ -38,9 +38,9 @@ export const NearbyAttractions: React.FC<NearbyAttractionsProps> = ({ hotelName,
     }
 
     return (
-        <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><MapPinIcon className="h-6 w-6 text-blue-500" /> What's Nearby?</h3>
-             <div className="prose max-w-none mb-4">
+        <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2"><MapPinIcon className="h-6 w-6 text-blue-500" /> What's Nearby?</h3>
+             <div className="prose dark:prose-invert max-w-none mb-4">
                 <React.Fragment>
                     {attractions.text.split('\n').map((paragraph, i) => (
                     <p key={i}>{paragraph}</p>
@@ -49,11 +49,11 @@ export const NearbyAttractions: React.FC<NearbyAttractionsProps> = ({ hotelName,
             </div>
             {attractions.sources.length > 0 && (
                 <div>
-                    <h4 className="font-bold text-gray-700">Places on Google Maps:</h4>
+                    <h4 className="font-bold text-gray-700 dark:text-gray-200">Places on Google Maps:</h4>
                     <ul className="list-disc list-inside text-sm">
                         {attractions.sources.map((source, index) => source.maps && (
                             <li key={index}>
-                                <a href={source.maps.uri} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                                <a href={source.maps.uri} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline dark:text-blue-400 flex items-center gap-1">
                                     <LinkIcon className="h-4 w-4" />
                                     {source.maps.title || 'View on Map'}
                                 </a>

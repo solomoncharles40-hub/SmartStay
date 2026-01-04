@@ -17,51 +17,53 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     e.preventDefault();
     onSearch({ location, checkIn, checkOut, guests });
   };
+  
+  const inputStyles = "w-full pl-10 pr-3 py-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 bg-white border border-gray-300 text-gray-800 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 transition-colors duration-300";
 
   return (
     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-10 gap-2 items-center w-full">
       <div className="relative md:col-span-3">
-        <MapPinIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <MapPinIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-500" />
         <input
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder="Where are you going?"
-          className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+          className={inputStyles}
         />
       </div>
       <div className="relative md:col-span-2">
-        <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-500" />
         <input
           type="date"
           value={checkIn}
           onChange={(e) => setCheckIn(e.target.value)}
-          className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+          className={inputStyles + " text-gray-500 dark:text-gray-400"}
         />
       </div>
       <div className="relative md:col-span-2">
-        <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <CalendarIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-500" />
         <input
           type="date"
           value={checkOut}
           onChange={(e) => setCheckOut(e.target.value)}
-          className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+          className={inputStyles + " text-gray-500 dark:text-gray-400"}
         />
       </div>
       <div className="relative md:col-span-2">
-         <UserGroupIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-400" />
+         <UserGroupIcon className="absolute top-1/2 left-3 -translate-y-1/2 h-5 w-5 text-gray-500" />
         <input
           type="number"
           min="1"
           value={guests}
           onChange={(e) => setGuests(e.target.value)}
           placeholder="Guests"
-          className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+          className={inputStyles}
         />
       </div>
       <button
         type="submit"
-        className="md:col-span-1 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+        className="md:col-span-1 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40"
       >
         <MagnifyingGlassIcon className="h-5 w-5" />
         <span className="hidden md:inline">Search</span>

@@ -29,17 +29,17 @@ export const AITripPlanner: React.FC<AITripPlannerProps> = ({ searchParams }) =>
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md border border-blue-100">
-            <h3 className="text-2xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-blue-100 dark:border-blue-900/50">
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center gap-2">
                 <SparklesIcon className="h-6 w-6 text-blue-500" />
                 AI-Powered Itinerary Planner
             </h3>
-            <p className="text-gray-600 mb-4">Let our most powerful AI create a detailed, personalized trip plan for you. The more detail you provide, the better the result!</p>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">Let our most powerful AI create a detailed, personalized trip plan for you. The more detail you provide, the better the result!</p>
             
             <textarea
                 value={request}
                 onChange={(e) => setRequest(e.target.value)}
-                className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                 placeholder="e.g., Plan a 7-day family trip to Paris with two kids (8 and 12)..."
             />
             <button
@@ -53,12 +53,12 @@ export const AITripPlanner: React.FC<AITripPlannerProps> = ({ searchParams }) =>
             {isLoading && (
                 <div className="mt-6 text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-                    <p className="text-gray-600 mt-2">Our AI is crafting your perfect trip. This may take a moment...</p>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2">Our AI is crafting your perfect trip. This may take a moment...</p>
                 </div>
             )}
 
             {itinerary && (
-                <div className="mt-6 prose max-w-none">
+                <div className="mt-6 prose dark:prose-invert max-w-none">
                      <React.Fragment>
                         {itinerary.split('\n').map((paragraph, i) => (
                         <p key={i}>{paragraph}</p>

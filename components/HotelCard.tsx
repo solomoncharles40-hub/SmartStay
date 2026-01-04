@@ -11,10 +11,10 @@ interface HotelCardProps {
 
 const AmenityIcon: React.FC<{ amenity: string }> = ({ amenity }) => {
     switch (amenity.toLowerCase()) {
-        case 'wifi': return <WifiIcon className="h-5 w-5 text-gray-500" />;
-        case 'pool': return <SparklesIcon className="h-5 w-5 text-gray-500" />; // Placeholder
-        case 'gym': return <BuildingLibraryIcon className="h-5 w-5 text-gray-500" />; // Placeholder
-        case 'parking': return <ParkingIcon className="h-5 w-5 text-gray-500" />;
+        case 'wifi': return <WifiIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />;
+        case 'pool': return <SparklesIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />; // Placeholder
+        case 'gym': return <BuildingLibraryIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />; // Placeholder
+        case 'parking': return <ParkingIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />;
         default: return null;
     }
 }
@@ -39,27 +39,27 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, onSelectHotel }) =>
   }, [smartScore]);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row hover:shadow-2xl transition-shadow duration-300 cursor-pointer" onClick={() => onSelectHotel(hotel)}>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row hover:shadow-2xl dark:hover:shadow-blue-900/50 transition-shadow duration-300 cursor-pointer" onClick={() => onSelectHotel(hotel)}>
       <img src={hotel.imageUrl} alt={hotel.name} className="w-full md:w-1/3 h-64 md:h-auto object-cover" />
       <div className="p-6 flex flex-col justify-between flex-grow">
         <div>
             <div className="flex justify-between items-start">
-                <h3 className="text-2xl font-bold text-gray-800">{hotel.name}</h3>
+                <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{hotel.name}</h3>
                 <div className="flex items-center gap-1 bg-yellow-400 text-white px-2 py-1 rounded-md text-sm font-bold">
                     <StarIcon className="h-4 w-4" />
                     <span>{hotel.rating.toFixed(1)}</span>
                 </div>
             </div>
-            <div className="flex items-center text-gray-500 mt-1">
+            <div className="flex items-center text-gray-500 dark:text-gray-400 mt-1">
                 <MapPinIcon className="h-4 w-4 mr-1" />
                 <span>{hotel.city}, {hotel.country}</span>
-                <span className="mx-2 text-gray-300">|</span>
+                <span className="mx-2 text-gray-300 dark:text-gray-600">|</span>
                 <span className="text-sm">{hotel.reviews} reviews</span>
             </div>
-            <p className="text-gray-600 mt-4 text-sm leading-relaxed line-clamp-2">{hotel.description}</p>
+            <p className="text-gray-600 dark:text-gray-300 mt-4 text-sm leading-relaxed line-clamp-2">{hotel.description}</p>
              <div className="flex items-center mt-4 gap-4">
                 {hotel.amenities.slice(0, 4).map(amenity => (
-                    <div key={amenity} className="flex items-center gap-2 text-gray-600">
+                    <div key={amenity} className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                         <AmenityIcon amenity={amenity} />
                         <span className="text-sm">{amenity}</span>
                     </div>
@@ -68,8 +68,8 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, onSelectHotel }) =>
         </div>
         <div className="mt-6 flex justify-between items-center">
           <div>
-            <span className="text-2xl font-bold text-gray-800">${hotel.pricePerNight}</span>
-            <span className="text-sm text-gray-500"> / night</span>
+            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">${hotel.pricePerNight}</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400"> / night</span>
           </div>
           {smartScore !== null ? (
             <div className="text-right">
@@ -77,10 +77,10 @@ export const HotelCard: React.FC<HotelCardProps> = ({ hotel, onSelectHotel }) =>
                     <SparklesIcon className="h-4 w-4" />
                     SmartStay Score
                 </div>
-                <p className="text-2xl font-bold text-gray-800">{smartScore}</p>
+                <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{smartScore}</p>
             </div>
           ) : (
-             <div className="animate-pulse bg-gray-200 h-12 w-24 rounded-md"></div>
+             <div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-12 w-24 rounded-md"></div>
           )}
         </div>
       </div>

@@ -26,16 +26,16 @@ export const LocalInfo: React.FC<LocalInfoProps> = ({ location }) => {
     };
     
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">Discover {location}</h3>
-            <p className="text-gray-600 mb-4">Get up-to-date information powered by Google Search.</p>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Discover {location}</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">Get up-to-date information powered by Google Search.</p>
             
             <div className="flex items-center gap-2 mb-4">
                 <input
                     type="text"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                     placeholder="e.g., best restaurants, local holidays..."
                 />
                 <button
@@ -51,13 +51,13 @@ export const LocalInfo: React.FC<LocalInfoProps> = ({ location }) => {
             {isLoading && (
                 <div className="mt-6 text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-                    <p className="text-gray-600 mt-2">Searching for the latest info...</p>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2">Searching for the latest info...</p>
                 </div>
             )}
 
             {info && (
                 <div className="mt-6">
-                    <div className="prose max-w-none mb-4">
+                    <div className="prose dark:prose-invert max-w-none mb-4">
                         <React.Fragment>
                             {info.text.split('\n').map((paragraph, i) => (
                             <p key={i}>{paragraph}</p>
@@ -66,11 +66,11 @@ export const LocalInfo: React.FC<LocalInfoProps> = ({ location }) => {
                     </div>
                     {info.sources.length > 0 && (
                         <div>
-                            <h4 className="font-bold text-gray-700">Sources:</h4>
+                            <h4 className="font-bold text-gray-700 dark:text-gray-200">Sources:</h4>
                             <ul className="list-disc list-inside text-sm">
                                 {info.sources.map((source, index) => source.web && (
                                     <li key={index}>
-                                        <a href={source.web.uri} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">
+                                        <a href={source.web.uri} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline dark:text-blue-400 flex items-center gap-1">
                                             <LinkIcon className="h-4 w-4" />
                                             {source.web.title || source.web.uri}
                                         </a>
