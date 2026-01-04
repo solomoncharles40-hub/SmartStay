@@ -13,7 +13,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearch }) => {
   const [activeTab, setActiveTab] = useState<'stays' | 'flights'>('stays');
 
   return (
-    <div className="relative rounded-lg overflow-hidden h-[500px] md:h-[calc(100vh-200px)] min-h-[450px] flex flex-col items-center justify-center text-white text-center p-4">
+    <div className="relative rounded-lg overflow-hidden flex flex-col items-center justify-center text-white text-center px-4 py-16 sm:py-24 md:py-4 md:h-[calc(100vh-200px)] min-h-[450px]">
         <img src="https://picsum.photos/seed/tropicalbeach/1600/900" alt="A beautiful beach resort with palm trees and clear turquoise water." className="absolute top-0 left-0 w-full h-full object-cover z-0" />
         <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10"></div>
         <div className="relative z-20 w-full max-w-5xl flex flex-col items-center">
