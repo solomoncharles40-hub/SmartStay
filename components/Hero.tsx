@@ -13,17 +13,17 @@ export const Hero: React.FC<HeroProps> = ({ onSearch }) => {
   const [activeTab, setActiveTab] = useState<'stays' | 'flights'>('stays');
 
   return (
-    <div className="relative rounded-lg overflow-hidden h-[calc(100vh-200px)] min-h-[450px] flex flex-col items-center justify-center text-white text-center p-4">
+    <div className="relative rounded-lg overflow-hidden h-[500px] md:h-[calc(100vh-200px)] min-h-[450px] flex flex-col items-center justify-center text-white text-center p-4">
         <img src="https://picsum.photos/seed/tropicalbeach/1600/900" alt="A beautiful beach resort with palm trees and clear turquoise water." className="absolute top-0 left-0 w-full h-full object-cover z-0" />
         <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10"></div>
         <div className="relative z-20 w-full max-w-5xl flex flex-col items-center">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-lg">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-lg">
               Why pay more to travel?
             </h1>
             <p className="mt-4 text-lg text-gray-100 max-w-3xl drop-shadow-md">
               SmartStay helps you find cheaper stays and smarter travel deals worldwide.
             </p>
-            <div className="mt-12 w-full bg-white/90 dark:bg-gray-900/80 backdrop-blur-lg p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
+            <div className="mt-8 md:mt-12 w-full bg-white/90 dark:bg-gray-900/80 backdrop-blur-lg p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
                 <div className="flex mb-4 border-b border-gray-200 dark:border-gray-700">
                     <button 
                         onClick={() => setActiveTab('stays')}
