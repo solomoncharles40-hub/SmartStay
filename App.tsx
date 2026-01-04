@@ -100,6 +100,23 @@ const App: React.FC = () => {
     setView('home');
   };
 
+  const handleDealClick = (location: string) => {
+    const today = new Date();
+    const futureDate = new Date();
+    futureDate.setDate(today.getDate() + 7);
+
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
+    const params: SearchParams = {
+        location: location.split(',')[0].trim(),
+        checkIn: formatDate(today),
+        checkOut: formatDate(futureDate),
+        guests: '2',
+    };
+    handleSearch(params);
+    window.scrollTo(0, 0);
+  };
+
   const renderView = () => {
     if (isLoading) {
       return (
@@ -125,7 +142,7 @@ const App: React.FC = () => {
               <Hero onSearch={handleSearch} />
               <div className="my-16 space-y-16">
                   <HomeIntro />
-                  <DealsSection />
+                  <DealsSection onDealClick={handleDealClick} />
               </div>
             </>
         );

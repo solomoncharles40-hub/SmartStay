@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, GenerateContentResponse, GroundingChunk } from "@google/genai";
-import type { Hotel } from '../types';
+import type { Hotel, FlightSearchParams } from '../types';
 
 const API_KEY = process.env.API_KEY;
 
@@ -132,5 +132,27 @@ export const planComplexItinerary = async (request: string): Promise<string> => 
     } catch (error) {
         console.error("Error planning itinerary:", error);
         return "I'm sorry, I encountered an issue while planning your trip. Please try again.";
+    }
+};
+
+export const getFlightInfo = async (params: FlightSearchParams): Promise<string> => {
+    try {
+        const prompt = `A user is searching for a ${params.flightClass} flight for ${params.travelers} traveler(s) from ${params.departure} to ${params.destination}, departing on ${params.departDate || 'an unspecified date'} and returning on ${params.returnDate || 'an unspecified date'}.
+        
+Our flight booking feature is not yet implemented. 
+Provide a friendly and helpful message that:
+1. Acknowledges their specific search query.
+2. Informs them that direct booking isn't available yet.
+3. Offers to provide helpful travel information instead, like major airlines on that route, or tips for finding the best time to book.
+
+Keep the tone helpful and engaging.`;
+        const response = await ai.models.generateContent({
+            model: 'gemini-3-flash-preview',
+            contents: prompt,
+        });
+        return response.text;
+    } catch (error) {
+        console.error("Error getting flight info:", error);
+        return "I'm sorry, I can't search for flights right now, but I can help you find information about your destination!";
     }
 };

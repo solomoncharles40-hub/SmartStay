@@ -64,7 +64,11 @@ const deals = [
   },
 ];
 
-export const DealsSection: React.FC = () => {
+interface DealsSectionProps {
+    onDealClick: (location: string) => void;
+}
+
+export const DealsSection: React.FC<DealsSectionProps> = ({ onDealClick }) => {
   return (
     <section id="deals" className="py-12">
       <div className="container mx-auto px-6">
@@ -73,7 +77,11 @@ export const DealsSection: React.FC = () => {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {deals.map((deal) => (
-            <div key={deal.name} className="group relative rounded-lg overflow-hidden shadow-lg cursor-pointer h-96">
+            <div 
+                key={deal.name} 
+                onClick={() => onDealClick(deal.name)}
+                className="group relative rounded-lg overflow-hidden shadow-lg cursor-pointer h-96"
+            >
               <img src={deal.imageUrl} alt={deal.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-6 text-white">

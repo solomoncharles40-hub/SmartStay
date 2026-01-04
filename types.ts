@@ -21,6 +21,15 @@ export interface SearchParams {
   guests: string;
 }
 
+export interface FlightSearchParams {
+  departure: string;
+  destination: string;
+  departDate: string;
+  returnDate: string;
+  travelers: string;
+  flightClass: string;
+}
+
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
