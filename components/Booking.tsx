@@ -9,29 +9,12 @@ import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from '@pa
 // --- Stripe Configuration ---
 // It's safe to expose the publishable key.
 const stripePromise = loadStripe('pk_test_51HPvU92eZvYxgC9s4zcb3s5c9s2s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s00j2s5c9s2');
-const cardElementOptions = {
-    style: {
-        base: {
-            color: "#32325d",
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            fontSmoothing: "antialiased",
-            fontSize: "16px",
-            "::placeholder": {
-                color: "#aab7c4",
-            },
-        },
-        invalid: {
-            color: "#fa755a",
-            iconColor: "#fa755a",
-        },
-    },
-};
 
 // --- PayPal Configuration ---
 const PAYPAL_CLIENT_ID = "test"; // Use "test" for sandbox environment
 
 // --- Internal Checkout Form Component ---
-const CheckoutForm: React.FC<{ details: BookingDetails; onConfirm: () => void; isLoggedIn: boolean; }> = ({ details, onConfirm, isLoggedIn }) => {
+const CheckoutForm: React.FC<{ details: BookingDetails; onConfirm: () => void; isLoggedIn: boolean; theme: 'light' | 'dark' }> = ({ details, onConfirm, isLoggedIn, theme }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [{ isPending: isPaypalLoading }] = usePayPalScriptReducer();
@@ -40,6 +23,24 @@ const CheckoutForm: React.FC<{ details: BookingDetails; onConfirm: () => void; i
     const [error, setError] = useState<string | null>(null);
     const [formState, setFormState] = useState({ name: '', email: '' });
     const [saveCard, setSaveCard] = useState(false);
+
+    const cardElementOptions = {
+        style: {
+            base: {
+                color: theme === 'dark' ? '#fff' : '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: "antialiased",
+                fontSize: "16px",
+                "::placeholder": {
+                    color: theme === 'dark' ? '#6b7280' : '#aab7c4',
+                },
+            },
+            invalid: {
+                color: "#fa755a",
+                iconColor: "#fa755a",
+            },
+        },
+    };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -236,7 +237,7 @@ const CheckoutForm: React.FC<{ details: BookingDetails; onConfirm: () => void; i
 
 
 // --- Main Booking Component ---
-export const Booking: React.FC<{ details: BookingDetails; onConfirm: () => void; onBack: () => void; isLoggedIn: boolean; }> = ({ details, onConfirm, onBack, isLoggedIn }) => {
+export const Booking: React.FC<{ details: BookingDetails; onConfirm: () => void; onBack: () => void; isLoggedIn: boolean; theme: 'light' | 'dark' }> = ({ details, onConfirm, onBack, isLoggedIn, theme }) => {
     
     const paypalOptions = {
         "client-id": PAYPAL_CLIENT_ID,
@@ -305,7 +306,7 @@ export const Booking: React.FC<{ details: BookingDetails; onConfirm: () => void;
                 <div>
                      <PayPalScriptProvider options={paypalOptions}>
                         <Elements stripe={stripePromise}>
-                            <CheckoutForm details={details} onConfirm={onConfirm} isLoggedIn={isLoggedIn} />
+                            <CheckoutForm details={details} onConfirm={onConfirm} isLoggedIn={isLoggedIn} theme={theme} />
                         </Elements>
                     </PayPalScriptProvider>
                 </div>

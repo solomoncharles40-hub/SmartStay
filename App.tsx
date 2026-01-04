@@ -132,7 +132,7 @@ const App: React.FC = () => {
       case 'detail':
         return selectedHotel && <HotelDetail hotel={selectedHotel} onBack={handleBackToResults} onBookNow={handleInitiateBooking} />;
       case 'booking':
-        return bookingDetails && <Booking details={bookingDetails} onConfirm={handleConfirmBooking} onBack={handleCancelBooking} isLoggedIn={isLoggedIn} />;
+        return bookingDetails && <Booking details={bookingDetails} onConfirm={handleConfirmBooking} onBack={handleCancelBooking} isLoggedIn={isLoggedIn} theme={theme} />;
       case 'confirmation':
         return bookingDetails && <BookingConfirmation details={bookingDetails} onGoHome={handleReturnHome} />;
       case 'home':
