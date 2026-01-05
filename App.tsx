@@ -13,6 +13,7 @@ import { FlightBookingConfirmation } from './components/FlightBookingConfirmatio
 import { HomeIntro } from './components/HomeIntro';
 import { DealsSection } from './components/DealsSection';
 import { AboutUs } from './components/AboutUs';
+import { OffSeasonDeals } from './components/OffSeasonDeals';
 import type { Hotel, SearchParams, BookingDetails, AIDeal, AIFlightDeal, FlightSearchParams, FlightBookingDetails } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
@@ -215,6 +216,7 @@ const App: React.FC = () => {
               <Hero onSearch={handleSearch} onBookAIFlightDeal={handleBookAIFlightDeal} />
               <div className="my-16 space-y-16">
                   <HomeIntro />
+                  <OffSeasonDeals onDealClick={handleDealClick} />
                   <DealsSection onDealClick={handleDealClick} />
               </div>
             </>
