@@ -7,11 +7,87 @@ interface SearchBarProps {
   onSearch: (params: SearchParams) => void;
 }
 
-const allDestinations = [
-  'New York, USA', 'Paris, France', 'Tokyo, Japan', 'London, UK', 'Sydney, Australia', 'Rome, Italy', 'Dubai, UAE', 'Berlin, Germany',
-  'Los Angeles, USA', 'Barcelona, Spain', 'Amsterdam, Netherlands', 'Singapore, Singapore', 'Bangkok, Thailand', 'Hong Kong, China',
-  'Istanbul, Turkey', 'San Francisco, USA', 'Miami, USA', 'Toronto, Canada', 'Vancouver, Canada', 'Seoul, South Korea'
-];
+const getAutocompleteSuggestions = (query: string): string[] => {
+    const lowerQuery = query.toLowerCase().trim();
+    if (!lowerQuery) return [];
+
+    const suggestions: { [key: string]: string[] } = {
+        'a': ["Amsterdam, Netherlands", "Athens, Greece", "Auckland, New Zealand", "Austin, USA"],
+        'b': ["Barcelona, Spain", "Bali, Indonesia", "Bangkok, Thailand", "Berlin, Germany", "Boston, USA", "Barbados"],
+        'c': ["Cairo, Egypt", "Cancun, Mexico", "Cape Town, South Africa", "Chicago, USA", "Copenhagen, Denmark"],
+        'd': ["Dubai, UAE", "Dublin, Ireland", "Delhi, India", "Denver, USA"],
+        'e': ["Edinburgh, Scotland", "Istanbul, Turkey (IST)"],
+        'f': ["Florence, Italy", "Frankfurt, Germany (FRA)"],
+        'h': ["Hong Kong, China", "Honolulu, USA (HNL)"],
+        'i': ["Istanbul, Turkey", "Ibiza, Spain"],
+        'l': ["London, UK", "Los Angeles, USA", "Lisbon, Portugal", "Las Vegas, USA"],
+        'm': ["Madrid, Spain", "Maldives", "Miami, USA", "Milan, Italy", "Munich, Germany"],
+        'n': ["New York, USA", "Nice, France", "Nairobi, Kenya"],
+        'p': ["Paris, France", "Prague, Czech Republic", "Phuket, Thailand"],
+        'r': ["Rome, Italy", "Rio de Janeiro, Brazil"],
+        's': ["Sydney, Australia", "Singapore, Singapore", "Seoul, South Korea", "San Francisco, USA", "Santorini, Greece"],
+        't': ["Tokyo, Japan", "Toronto, Canada", "Thailand"],
+        'v': ["Vancouver, Canada", "Venice, Italy", "Vienna, Austria"],
+    };
+    
+    // Full word matches with expanded suggestions
+    if (lowerQuery === 'london') {
+        return [
+            "London, UK",
+            "London (LHR) - Heathrow Airport",
+            "London (LGW) - Gatwick Airport",
+            "London (STN) - Stansted Airport",
+            "London → Paris (Flight Route)",
+            "London → New York (Flight Route)"
+        ];
+    }
+    if (lowerQuery === 'paris') {
+        return [
+            "Paris, France",
+            "Paris (CDG) - Charles de Gaulle Airport",
+            "Paris (ORY) - Orly Airport",
+            "Paris → London (Flight Route)",
+            "Paris → Rome (Flight Route)"
+        ];
+    }
+     if (lowerQuery === 'new york') {
+        return [
+            "New York, USA",
+            "New York (JFK) - John F. Kennedy International Airport",
+            "New York (LGA) - LaGuardia Airport",
+            "New York (EWR) - Newark Liberty International Airport",
+            "New York → Los Angeles (Flight Route)"
+        ];
+    }
+     if (lowerQuery === 'tokyo') {
+        return [
+            "Tokyo, Japan",
+            "Tokyo (HND) - Haneda Airport",
+            "Tokyo (NRT) - Narita International Airport",
+            "Tokyo → Seoul (Flight Route)",
+            "Tokyo → Kyoto (Train Route)"
+        ];
+    }
+
+    // Partial matches
+    if (lowerQuery.startsWith('ba')) {
+        return [
+            "Barcelona, Spain",
+            "Barbados",
+            "Bari, Italy",
+            "Bali, Indonesia",
+            "Bangkok, Thailand",
+            "Berlin → Barcelona (Flight Route)"
+        ];
+    }
+
+    // General search
+    const firstChar = lowerQuery.charAt(0);
+    const potentialMatches = suggestions[firstChar] || [];
+    
+    return potentialMatches.filter(dest => dest.toLowerCase().includes(lowerQuery));
+};
+
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [location, setLocation] = useState('');
@@ -27,9 +103,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     setLocation(value);
 
     if (value.length > 0) {
-      const filteredSuggestions = allDestinations.filter(dest =>
-        dest.toLowerCase().includes(value.toLowerCase())
-      );
+      const filteredSuggestions = getAutocompleteSuggestions(value);
       setSuggestions(filteredSuggestions);
       setShowSuggestions(true);
     } else {
@@ -38,7 +112,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    setLocation(suggestion);
+    // Clean up suggestion before setting it (e.g., remove airport codes or route info)
+    const cleanedSuggestion = suggestion.split('(')[0].trim();
+    setLocation(cleanedSuggestion);
     setShowSuggestions(false);
   };
 
