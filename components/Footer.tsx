@@ -1,7 +1,16 @@
 
 import React from 'react';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onAboutClick: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onAboutClick }) => {
+  const handleLinkClick = (handler: () => void) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    handler();
+  };
+
   return (
     <footer className="bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
       <div className="container mx-auto px-4 py-8">
@@ -9,7 +18,7 @@ export const Footer: React.FC = () => {
           <div>
             <h3 className="font-bold mb-4 text-gray-900 dark:text-white">SmartStay</h3>
             <ul>
-              <li className="mb-2"><a href="#" className="hover:text-blue-600 dark:hover:text-blue-400">About Us</a></li>
+              <li className="mb-2"><a href="#" onClick={handleLinkClick(onAboutClick)} className="hover:text-blue-600 dark:hover:text-blue-400">About Us</a></li>
               <li className="mb-2"><a href="#" className="hover:text-blue-600 dark:hover:text-blue-400">Careers</a></li>
               <li className="mb-2"><a href="#" className="hover:text-blue-600 dark:hover:text-blue-400">Press</a></li>
             </ul>

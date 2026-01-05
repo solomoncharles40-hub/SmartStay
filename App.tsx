@@ -12,11 +12,12 @@ import { FlightBooking } from './components/FlightBooking';
 import { FlightBookingConfirmation } from './components/FlightBookingConfirmation';
 import { HomeIntro } from './components/HomeIntro';
 import { DealsSection } from './components/DealsSection';
+import { AboutUs } from './components/AboutUs';
 import type { Hotel, SearchParams, BookingDetails, AIDeal, AIFlightDeal, FlightSearchParams, FlightBookingDetails } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'flightBooking' | 'flightConfirmation'>('home');
+  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'flightBooking' | 'flightConfirmation' | 'about'>('home');
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
@@ -78,6 +79,11 @@ const App: React.FC = () => {
     setBookingDetails(null);
     setFlightBookingDetails(null);
   }
+
+  const handleNavigateToAbout = () => {
+    setView('about');
+    window.scrollTo(0, 0);
+  };
 
   const handleInitiateBooking = (details: Omit<BookingDetails, 'nights' | 'totalPrice'>) => {
     const checkInDate = new Date(details.checkIn);
@@ -200,6 +206,8 @@ const App: React.FC = () => {
         return flightBookingDetails && <FlightBooking details={flightBookingDetails} onConfirm={handleConfirmFlightBooking} onBack={handleCancelFlightBooking} isLoggedIn={isLoggedIn} theme={theme} />;
       case 'flightConfirmation':
         return flightBookingDetails && <FlightBookingConfirmation details={flightBookingDetails} onGoHome={handleReturnHome} />;
+      case 'about':
+        return <AboutUs />;
       case 'home':
       default:
         return (
@@ -216,11 +224,11 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} />
+      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} />
       <main className="flex-grow container mx-auto px-4 py-8">
         {renderView()}
       </main>
-      <Footer />
+      <Footer onAboutClick={handleNavigateToAbout} />
       <Chatbot />
     </div>
   );
