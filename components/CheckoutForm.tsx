@@ -64,12 +64,10 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
     const handleStripeSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // 1. Guard against submission if Stripe.js has not loaded, or if a payment is already in progress.
         if (!stripe || !elements || paymentStatus === 'processing' || paymentStatus === 'successful') {
             return;
         }
 
-        // 2. Set the state to processing to update the UI (e.g., show a spinner).
         setPaymentStatus('processing');
         setError(null);
 
@@ -81,7 +79,6 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
             return;
         }
 
-        // 3. Create a PaymentMethod with the card details and billing information.
         const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
@@ -91,19 +88,18 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
             },
         });
 
-        // 4. Handle the response from Stripe.
         if (error) {
-            // Show error message to the customer.
-            setError(error.message || "An unexpected error occurred.");
+            // Show a specific, user-friendly error message from Stripe if available.
+            if (error.message) {
+                setError(error.message);
+            } else {
+                setError("An unexpected error occurred while processing your payment. Please try again.");
+            }
             setPaymentStatus('failed');
         } else {
-            // 5. If successful, simulate saving the payment method for future use if the user opted in.
             if (savePaymentInfo) {
-                // In a real app, you would send stripePaymentMethod.id to your server to attach it to a customer.
                 console.log('User opted to save card. Payment Method ID:', stripePaymentMethod.id);
             }
-
-            // 6. Update the UI to show success and trigger the final confirmation step after a delay.
             setPaymentStatus('successful');
             confirmationTimeoutRef.current = window.setTimeout(() => {
                 onConfirm();

@@ -25,12 +25,12 @@ const deals = [
   {
     name: 'Maldives',
     price: 799,
-    imageUrl: 'https://picsum.photos/seed/maldives/800/600',
+    imageUrl: 'https://picsum.photos/seed/maldives-villas/800/600',
   },
   {
     name: 'Greece',
     price: 549,
-    imageUrl: 'https://picsum.photos/seed/greece/800/600',
+    imageUrl: 'https://picsum.photos/seed/santorini-greece/800/600',
   },
   {
     name: 'Thailand',
@@ -50,12 +50,12 @@ const deals = [
   {
     name: 'Cairo, Egypt',
     price: 580,
-    imageUrl: 'https://picsum.photos/seed/cairo/800/600',
+    imageUrl: 'https://picsum.photos/seed/pyramids-egypt/800/600',
   },
   {
     name: 'Patagonia, Chile',
     price: 920,
-    imageUrl: 'https://picsum.photos/seed/patagonia/800/600',
+    imageUrl: 'https://picsum.photos/seed/torres-del-paine/800/600',
   },
   {
     name: 'Auckland, NZ',
