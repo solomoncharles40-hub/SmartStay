@@ -82,6 +82,11 @@ const deals = [
     price: 599,
     imageUrl: 'https://picsum.photos/seed/dominican-republic-beach/800/600',
   },
+  {
+    name: 'Italy',
+    price: 499,
+    imageUrl: 'https://picsum.photos/seed/amalfi-coast-italy/800/600',
+  },
 ];
 
 interface DealsSectionProps {
