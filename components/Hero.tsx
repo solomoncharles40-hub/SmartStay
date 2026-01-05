@@ -15,7 +15,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearch, onBookAIFlightDeal }) => {
 
   return (
     <div className="relative rounded-lg overflow-hidden flex flex-col items-center justify-center text-white text-center px-4 py-16 sm:py-24 md:py-4 md:h-[calc(100vh-200px)] min-h-[450px]">
-        <img src="https://picsum.photos/seed/airportview/1600/900" alt="An airplane wing seen from a window, flying above the clouds at sunset." className="absolute top-0 left-0 w-full h-full object-cover z-0" />
+        <img src="https://picsum.photos/seed/tropical/1600/900" alt="A serene tropical beach with palm trees and turquoise water." className="absolute top-0 left-0 w-full h-full object-cover z-0" />
         <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10"></div>
         <div className="relative z-20 w-full max-w-5xl flex flex-col items-center">
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-lg">
