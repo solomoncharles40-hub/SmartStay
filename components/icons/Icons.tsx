@@ -179,3 +179,15 @@ export const ArrowRightIcon: React.FC<IconProps> = (props) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
     </svg>
 );
+
+export const CreditCardIcon: React.FC<IconProps> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3M3.75 21h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 18.75 4.5h-15A2.25 2.25 0 0 0 1.5 6.75v10.5A2.25 2.25 0 0 0 3.75 21Z" />
+  </svg>
+);
+
+export const PayPalIcon: React.FC<IconProps> = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M8.32 21.18c.44-.03 1.05-.62 1.2-1.02l.6-3.59c.04-.2.17-.32.36-.32h2.3c3.08 0 4.62-2.15 4.02-5.03-.4-1.9-2.12-3.2-4.13-3.2h-2.2c-.42 0-.62-.35-.5-.76l.73-4.32a.66.66 0 0 1 .65-.61h2.83c1.3 0 2.3.82 2.1 2.05-.15 1-.9 1.6-1.83 1.6h-1.2c-.46 0-.68.38-.56.82l.35 2.15c.12.63.78 1.05 1.41 1.05h.85c2.48 0 4.2-1.57 4.6-4.05.3-1.8-.6-3.4-2.2-4.1-1.6-.7-3.6-.6-5.4-.6H8.5c-3.6 0-5.1 2.6-4.4 5.5l.6 3.6c.1.6.6 1 1.2 1h1.9c.5 0 .8.4.7.9l-.6 3.6c-.1.6-.6 1-1.2 1H3.6c-.6 0-1 .4-.9.9.2 1.1 1.4 1.7 2.6 1.7h2.12z" />
+  </svg>
+);

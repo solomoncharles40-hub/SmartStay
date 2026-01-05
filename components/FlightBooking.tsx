@@ -1,129 +1,14 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { FlightBookingDetails } from '../types';
-import { LockClosedIcon, BackArrowIcon, CheckCircleIcon, ExclamationCircleIcon, AirplaneIcon, UserGroupIcon, CalendarIcon } from './icons/Icons';
+import { BackArrowIcon, AirplaneIcon, UserGroupIcon } from './icons/Icons';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { CheckoutForm } from './CheckoutForm';
 
 const stripePromise = loadStripe('pk_test_51HPvU92eZvYxgC9s4zcb3s5c9s2s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s00j2s5c9s2');
 const PAYPAL_CLIENT_ID = "test";
-
-const CheckoutForm: React.FC<{ details: FlightBookingDetails; onConfirm: () => void; isLoggedIn: boolean; theme: 'light' | 'dark' }> = ({ details, onConfirm, isLoggedIn, theme }) => {
-    const stripe = useStripe();
-    const elements = useElements();
-    const [{ isPending: isPaypalLoading }] = usePayPalScriptReducer();
-    const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal'>('card');
-    const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'successful' | 'failed'>('idle');
-    const [error, setError] = useState<string | null>(null);
-    const [formState, setFormState] = useState({ name: '', email: '' });
-
-    const cardElementOptions = {
-        style: {
-            base: {
-                color: theme === 'dark' ? '#fff' : '#32325d',
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSmoothing: "antialiased",
-                fontSize: "16px",
-                "::placeholder": {
-                    color: theme === 'dark' ? '#6b7280' : '#aab7c4',
-                },
-            },
-            invalid: { color: "#fa755a", iconColor: "#fa755a" },
-        },
-    };
-
-    const handleStripeSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!stripe || !elements || paymentStatus === 'processing') return;
-        setPaymentStatus('processing');
-        setError(null);
-        const cardElement = elements.getElement(CardElement);
-        if (!cardElement) {
-            setError("Card details not found.");
-            setPaymentStatus('failed');
-            return;
-        }
-        const { error: stripeError } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
-            billing_details: { name: formState.name, email: formState.email },
-        });
-
-        if (stripeError) {
-            setError(stripeError.message || "An unexpected error occurred.");
-            setPaymentStatus('failed');
-        } else {
-            setPaymentStatus('successful');
-            setTimeout(() => onConfirm(), 2000);
-        }
-    };
-
-    const handlePaypalApprove = (data: any, actions: any) => {
-        setPaymentStatus('processing');
-        setError(null);
-        return actions.order.capture().then(() => {
-            setPaymentStatus('successful');
-            setTimeout(() => onConfirm(), 2000);
-        }).catch(() => {
-            setError("An error occurred with your PayPal payment.");
-            setPaymentStatus('failed');
-        });
-    };
-
-    return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col justify-center min-h-[450px]">
-            {paymentStatus === 'successful' ? (
-                <div className="text-center py-8 animate-fade-in">
-                    <CheckCircleIcon className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Payment Successful!</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mt-2">Finalizing your flight booking...</p>
-                </div>
-            ) : paymentStatus === 'processing' ? (
-                <div className="text-center py-8 animate-fade-in">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Processing Payment...</h3>
-                </div>
-            ) : (
-                <>
-                    <h2 className="text-2xl font-bold mb-4 dark:text-gray-100 self-start">Secure Payment</h2>
-                    <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6 w-full">
-                        <button onClick={() => setPaymentMethod('card')} className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'card' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'}`}>Pay with Card</button>
-                        <button onClick={() => setPaymentMethod('paypal')} className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'paypal' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'}`}>Pay with PayPal</button>
-                    </div>
-                    {error && <div className="w-full mb-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2 dark:bg-red-900/30 dark:text-red-300"><ExclamationCircleIcon className="h-5 w-5" /><span>{error}</span></div>}
-                    {paymentMethod === 'card' ? (
-                        <form onSubmit={handleStripeSubmit} className="animate-fade-in space-y-4">
-                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
-                                <input type="text" id="name" value={formState.name} onChange={(e) => setFormState(s => ({...s, name: e.target.value}))} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
-                            </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                                <input type="email" id="email" value={formState.email} onChange={(e) => setFormState(s => ({...s, email: e.target.value}))} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Card Details</label>
-                                <div className="mt-1 p-3 border border-gray-300 rounded-md shadow-sm dark:border-gray-600"><CardElement options={cardElementOptions} /></div>
-                            </div>
-                            <button type="submit" disabled={!stripe} className="w-full mt-6 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"><LockClosedIcon className="h-5 w-5" /><span>Pay with Card (${details.totalPrice})</span></button>
-                        </form>
-                    ) : (
-                        <div className="animate-fade-in">
-                            {isPaypalLoading ? <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" /> : 
-                                <PayPalButtons style={{ layout: "vertical", color: "blue" }}
-                                    createOrder={(data, actions) => actions.order.create({ purchase_units: [{ description: `Flight from ${details.flightParams.departure} to ${details.flightParams.destination}`, amount: { value: details.totalPrice.toString() } }] })}
-                                    onApprove={handlePaypalApprove}
-                                    onError={() => setError("An error occurred with PayPal.")}
-                                />
-                            }
-                        </div>
-                    )}
-                </>
-            )}
-        </div>
-    );
-};
 
 export const FlightBooking: React.FC<{ details: FlightBookingDetails; onConfirm: () => void; onBack: () => void; isLoggedIn: boolean; theme: 'light' | 'dark' }> = ({ details, onConfirm, onBack, isLoggedIn, theme }) => {
     const paypalOptions = { "client-id": PAYPAL_CLIENT_ID, currency: "USD", intent: "capture" };
@@ -157,7 +42,13 @@ export const FlightBooking: React.FC<{ details: FlightBookingDetails; onConfirm:
                 <div>
                     <PayPalScriptProvider options={paypalOptions}>
                         <Elements stripe={stripePromise}>
-                            <CheckoutForm details={details} onConfirm={onConfirm} isLoggedIn={isLoggedIn} theme={theme} />
+                            <CheckoutForm 
+                                totalPrice={details.totalPrice}
+                                purchaseDescription={`Flight from ${details.flightParams.departure} to ${details.flightParams.destination}`}
+                                onConfirm={onConfirm} 
+                                isLoggedIn={isLoggedIn} 
+                                theme={theme} 
+                            />
                         </Elements>
                     </PayPalScriptProvider>
                 </div>
