@@ -62,6 +62,21 @@ const deals = [
     price: 760,
     imageUrl: 'https://picsum.photos/seed/auckland/800/600',
   },
+  {
+    name: 'Barbados',
+    price: 620,
+    imageUrl: 'https://picsum.photos/seed/barbados-beach/800/600',
+  },
+  {
+    name: 'Morocco',
+    price: 550,
+    imageUrl: 'https://picsum.photos/seed/marrakech-market/800/600',
+  },
+  {
+    name: 'Seoul, South Korea',
+    price: 710,
+    imageUrl: 'https://picsum.photos/seed/seoul-palace/800/600',
+  },
 ];
 
 interface DealsSectionProps {
@@ -75,8 +90,8 @@ export const DealsSection: React.FC<DealsSectionProps> = ({ onDealClick }) => {
         <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
           Find Your Next Getaway
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {deals.map((deal) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {deals.slice(0, 15).map((deal) => (
             <div 
                 key={deal.name} 
                 onClick={() => onDealClick(deal.name)}
