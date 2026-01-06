@@ -7,7 +7,7 @@ const TravelpayoutsWidgetComponent: React.FC = () => {
     useEffect(() => {
         const script = document.createElement('script');
         
-        script.src = 'https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&target_host=www.aviasales.com%2Fsearch&locale=en&limit=4&powered_by=true&primary=%230085FF&promo_id=4044&campaign_id=100';
+        script.src = 'https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&target_host=www.aviasales.com%2Fsearch&locale=en&limit=4&powered_by=false&primary=%230085FF&promo_id=4044&campaign_id=100';
         script.async = true;
         script.charset = 'utf-8';
 
@@ -23,7 +23,9 @@ const TravelpayoutsWidgetComponent: React.FC = () => {
             // On cleanup, robustly clear the container of any content the script may have added.
             // This is crucial for React's Strict Mode, which mounts/unmounts components twice in development,
             // and ensures we don't have lingering widgets or multiple script instances.
-            container.innerHTML = ''; 
+            if (container) {
+                container.innerHTML = ''; 
+            }
         };
     }, []);
 
@@ -34,11 +36,11 @@ const TravelpayoutsWidgetComponent: React.FC = () => {
                     Find More Deals
                 </h2>
                 <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-                    Can't find what you're looking for? Broaden your search with our partner, Aviasales, for an extensive selection of flights, hotels, and car rentals worldwide.
+                    Can't find what you're looking for? Broaden your search with our partner for an extensive selection of flights, hotels, and car rentals worldwide.
                 </p>
                 <div 
                     ref={widgetContainerRef} 
-                    className="max-w-4xl mx-auto"
+                    className="max-w-4xl mx-auto min-h-[400px]"
                 >
                     {/* The Aviasales widget will be loaded here */}
                 </div>
