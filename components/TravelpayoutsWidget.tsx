@@ -7,8 +7,8 @@ export const TravelpayoutsWidget: React.FC = () => {
     useEffect(() => {
         const script = document.createElement('script');
         
-        // IMPORTANT: Replace 'YOUR_AFFILIATE_MARKER' with your actual Travelpayouts affiliate marker to earn commissions.
-        script.src = '//www.travelpayouts.com/widgets/en/hotels.js?marker=YOUR_AFFILIATE_MARKER&host=search.hotellook.com&locale=en&currency=usd&powered_by=true';
+        // Activated with a valid affiliate marker.
+        script.src = '//www.travelpayouts.com/widgets/en/hotels.js?marker=549446&host=search.hotellook.com&locale=en&currency=usd&powered_by=true';
         script.async = true;
         script.charset = 'UTF-8';
 
