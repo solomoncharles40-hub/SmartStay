@@ -31,10 +31,10 @@ const TravelpayoutsWidgetComponent: React.FC = () => {
         <section id="travelpayouts" className="py-16">
             <div className="container mx-auto px-6">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
-                    Find the Cheapest Flights
+                    Find More Deals
                 </h2>
                 <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-                    Can't find what you're looking for? Broaden your search with our partner, Aviasales, for an extensive selection of flights worldwide.
+                    Can't find what you're looking for? Broaden your search with our partner, Aviasales, for an extensive selection of flights, hotels, and car rentals worldwide.
                 </p>
                 <div 
                     ref={widgetContainerRef} 
