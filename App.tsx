@@ -187,9 +187,11 @@ const App: React.FC = () => {
         return (
             <div>
                 <Hero />
-                <div className="space-y-16 mt-16">
-                    <DealMap />
-                    <PopularRoutesWidget />
+                <div className="container mx-auto px-4 py-8">
+                    <div className="space-y-16 mt-16">
+                        <DealMap />
+                        <PopularRoutesWidget />
+                    </div>
                 </div>
             </div>
         );
@@ -215,7 +217,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} onCarRentalsClick={handleNavigateToCarRentals} onFlightsClick={handleNavigateToFlights} />
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className={`flex-grow ${view !== 'home' ? 'container mx-auto px-4 py-8' : ''}`}>
         {renderMainContent()}
       </main>
       <Footer onAboutClick={handleNavigateToAbout} />

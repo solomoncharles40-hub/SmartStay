@@ -18,12 +18,12 @@ export const Hero: React.FC = () => {
   `;
 
   return (
-    <div className="relative rounded-lg overflow-hidden text-white text-center">
+    <div className="relative text-white text-center">
         <img src="https://picsum.photos/seed/beach-paradise/1600/900" alt="A serene tropical beach with palm trees and turquoise water." className="absolute top-0 left-0 w-full h-full object-cover z-0" />
         <div className="absolute top-0 left-0 w-full h-full bg-black/40 z-10"></div>
         <div className="relative z-20 container mx-auto px-4">
-            <div className="flex flex-col items-center justify-between md:h-[calc(100vh-200px)] min-h-[600px] py-10">
-                <div className="text-center">
+            <div className="flex flex-col items-center justify-center min-h-[650px] md:min-h-[calc(100vh-150px)] py-16">
+                <div className="text-center mb-12">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-lg">
                     Better Deals, Smarter Stays
                     </h1>
@@ -31,7 +31,7 @@ export const Hero: React.FC = () => {
                     Find your next destination and let our AI create the perfect trip for you.
                     </p>
                 </div>
-                <div className="w-full h-[350px] bg-transparent">
+                <div className="w-full max-w-5xl h-[350px] bg-transparent">
                     <iframe
                         srcDoc={iframeContent}
                         title="Search Widget"
