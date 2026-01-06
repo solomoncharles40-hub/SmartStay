@@ -3,8 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { SearchResults } from './components/SearchResults';
-import { HomeIntro } from './components/HomeIntro';
-import { SearchBar } from './components/SearchBar';
+import { Hero } from './components/Hero';
 import { HotelDetail } from './components/HotelDetail';
 import { Chatbot } from './components/Chatbot';
 import { Booking } from './components/Booking';
@@ -187,11 +186,8 @@ const App: React.FC = () => {
       case 'home':
         return (
             <div>
-                <HomeIntro />
-                <div className="my-12">
-                  <SearchBar />
-                </div>
-                <div className="space-y-16">
+                <Hero />
+                <div className="space-y-16 mt-16">
                     <DealMap />
                     <PopularRoutesWidget />
                 </div>
