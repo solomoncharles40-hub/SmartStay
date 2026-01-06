@@ -8,9 +8,7 @@ import { HotelDetail } from './components/HotelDetail';
 import { Chatbot } from './components/Chatbot';
 import { Booking } from './components/Booking';
 import { BookingConfirmation } from './components/BookingConfirmation';
-import { DealsSection } from './components/DealsSection';
 import { AboutUs } from './components/AboutUs';
-import { OffSeasonDeals } from './components/OffSeasonDeals';
 import { DealMap } from './components/DealMap';
 import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
@@ -187,10 +185,8 @@ const App: React.FC = () => {
         return (
             <>
               <Hero />
-              <div className="mt-8 mb-16 space-y-16">
+              <div className="mt-8 mb-16">
                   <DealMap />
-                  <OffSeasonDeals onDealClick={handleDealClick} />
-                  <DealsSection onDealClick={handleDealClick} />
               </div>
             </>
         );
