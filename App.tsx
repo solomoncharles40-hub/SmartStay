@@ -3,7 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { SearchResults } from './components/SearchResults';
-import { Hero } from './components/Hero';
+import { HomeIntro } from './components/HomeIntro';
+import { SearchBar } from './components/SearchBar';
 import { HotelDetail } from './components/HotelDetail';
 import { Chatbot } from './components/Chatbot';
 import { Booking } from './components/Booking';
@@ -185,9 +186,15 @@ const App: React.FC = () => {
     switch (view) {
       case 'home':
         return (
-            <div className="mt-8 mb-16 space-y-16">
-                <DealMap />
-                <PopularRoutesWidget />
+            <div>
+                <HomeIntro />
+                <div className="my-12">
+                  <SearchBar />
+                </div>
+                <div className="space-y-16">
+                    <DealMap />
+                    <PopularRoutesWidget />
+                </div>
             </div>
         );
       case 'results':
@@ -212,7 +219,6 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} onCarRentalsClick={handleNavigateToCarRentals} onFlightsClick={handleNavigateToFlights} />
-      {view === 'home' && <Hero />}
       <main className="flex-grow container mx-auto px-4 py-8">
         {renderMainContent()}
       </main>
