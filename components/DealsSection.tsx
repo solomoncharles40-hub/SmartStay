@@ -87,6 +87,21 @@ const deals = [
     price: 499,
     imageUrl: 'https://picsum.photos/seed/amalfi-coast-italy/800/600',
   },
+  {
+    name: 'Bora Bora',
+    price: 1299,
+    imageUrl: 'https://picsum.photos/seed/bora-bora-bungalow/800/600',
+  },
+  {
+    name: 'Rio de Janeiro',
+    price: 650,
+    imageUrl: 'https://picsum.photos/seed/rio-de-janeiro-view/800/600',
+  },
+  {
+    name: 'Iceland',
+    price: 899,
+    imageUrl: 'https://picsum.photos/seed/iceland-aurora/800/600',
+  },
 ];
 
 interface DealsSectionProps {
