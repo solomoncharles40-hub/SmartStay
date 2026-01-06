@@ -188,11 +188,11 @@ const App: React.FC = () => {
         return (
             <>
               <Hero />
-              <div className="my-16 space-y-16">
+              <div className="mt-8 mb-16 space-y-16">
+                  <DealMap />
                   <TravelpayoutsWidget onDealClick={handleDealClick} />
                   <OffSeasonDeals onDealClick={handleDealClick} />
                   <DealsSection onDealClick={handleDealClick} />
-                  <DealMap />
               </div>
             </>
         );
