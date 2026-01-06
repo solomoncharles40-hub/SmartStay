@@ -10,7 +10,7 @@ interface BookingConfirmationProps {
 
 export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ details, onGoHome }) => {
   return (
-    <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl text-center animate-fade-in">
+    <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl text-center animate-fade-in">
         <CheckCircleIcon className="h-24 w-24 text-green-500 mx-auto mb-4" />
         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 mb-2">Booking Confirmed!</h1>
         <p className="text-gray-600 dark:text-gray-300 mb-6">

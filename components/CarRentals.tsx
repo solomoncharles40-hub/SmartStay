@@ -19,25 +19,23 @@ const CarRentalsComponent: React.FC = () => {
 
     return (
         <section id="car-rentals" className="py-12 animate-fade-in">
-            <div className="container mx-auto px-6">
-                 <h1 className="text-4xl font-extrabold text-center text-gray-900 dark:text-gray-100 mb-4">
-                    Rent a Car for Your Next Adventure
-                </h1>
-                <p className="text-lg text-center text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
-                    Find the best deals on rental cars from top companies worldwide. Enter your destination and dates to get started.
-                </p>
-                <div 
-                    className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 p-0 rounded-lg shadow-lg overflow-hidden h-[450px]"
-                >
-                    <iframe
-                        srcDoc={iframeContent}
-                        title="Car Rentals"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-                    />
-                </div>
+            <h1 className="text-4xl font-extrabold text-center text-gray-900 dark:text-gray-100 mb-4">
+                Rent a Car for Your Next Adventure
+            </h1>
+            <p className="text-lg text-center text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+                Find the best deals on rental cars from top companies worldwide. Enter your destination and dates to get started.
+            </p>
+            <div 
+                className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 p-0 rounded-lg shadow-lg overflow-hidden h-[450px]"
+            >
+                <iframe
+                    srcDoc={iframeContent}
+                    title="Car Rentals"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 'none' }}
+                    sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                />
             </div>
         </section>
     );

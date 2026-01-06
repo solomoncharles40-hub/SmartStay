@@ -8,7 +8,7 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CheckoutForm } from './CheckoutForm';
 
 // --- Stripe Configuration ---
-const stripePromise = loadStripe('pk_test_51HPvU92eZvYxgC9s4zcb3s5c9s2s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s00j2s5c9s2');
+const stripePromise = loadStripe('pk_test_51HPvU92eZvYxgC9s4zcb3s5c9s2s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s5s00j2s5c9s2');
 const PAYPAL_CLIENT_ID = "test"; 
 
 export const Booking: React.FC<{ details: BookingDetails; onConfirm: () => void; onBack: () => void; isLoggedIn: boolean; theme: 'light' | 'dark' }> = ({ details, onConfirm, onBack, isLoggedIn, theme }) => {
@@ -20,7 +20,7 @@ export const Booking: React.FC<{ details: BookingDetails; onConfirm: () => void;
     };
 
     return (
-        <div className="max-w-4xl mx-auto animate-fade-in">
+        <div className="animate-fade-in">
             <button onClick={onBack} className="flex items-center gap-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-semibold mb-6">
                 <BackArrowIcon className="h-5 w-5" />
                 Back to Hotel Details

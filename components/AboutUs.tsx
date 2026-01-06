@@ -4,7 +4,7 @@ import { SparklesIcon, SearchIcon, NetworkIntelligenceIcon } from './icons/Icons
 
 export const AboutUs: React.FC = () => {
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 animate-fade-in">
+    <div className="animate-fade-in">
       <h1 className="text-4xl font-extrabold text-center text-gray-900 dark:text-gray-100 mb-4">
         Welcome to Smart<span className="text-blue-600 dark:text-blue-400">Stay</span>
       </h1>

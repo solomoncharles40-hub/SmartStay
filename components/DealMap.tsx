@@ -19,20 +19,18 @@ const DealMapComponent: React.FC = () => {
 
     return (
         <section id="deal-map" className="py-12 bg-white dark:bg-gray-800 rounded-lg">
-            <div className="container mx-auto px-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
-                    Explore Deals on the Map
-                </h2>
-                <div className="w-full max-w-6xl mx-auto h-[500px] rounded-lg overflow-hidden shadow-lg">
-                    <iframe
-                        srcDoc={iframeContent}
-                        title="Deal Map"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-                    />
-                </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
+                Explore Deals on the Map
+            </h2>
+            <div className="w-full max-w-6xl mx-auto h-[500px] rounded-lg overflow-hidden shadow-lg">
+                <iframe
+                    srcDoc={iframeContent}
+                    title="Deal Map"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 'none' }}
+                    sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                />
             </div>
         </section>
     );

@@ -173,7 +173,7 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
-  const renderView = () => {
+  const renderMainContent = () => {
     if (isLoading) {
       return (
         <div className="flex justify-center items-center h-[calc(100vh-200px)]">
@@ -183,6 +183,13 @@ const App: React.FC = () => {
     }
 
     switch (view) {
+      case 'home':
+        return (
+            <div className="mt-8 mb-16 space-y-16">
+                <DealMap />
+                <PopularRoutesWidget />
+            </div>
+        );
       case 'results':
         return <SearchResults hotels={searchResults} onSelectHotel={handleSelectHotel} searchParams={searchParams!} onBookAIDeal={handleBookAIDeal} />;
       case 'detail':
@@ -197,25 +204,17 @@ const App: React.FC = () => {
         return <CarRentals />;
       case 'flights':
         return <Flights />;
-      case 'home':
       default:
-        return (
-            <>
-              <Hero />
-              <div className="mt-8 mb-16 space-y-16">
-                  <DealMap />
-                  <PopularRoutesWidget />
-              </div>
-            </>
-        );
+        return null;
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
       <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} onCarRentalsClick={handleNavigateToCarRentals} onFlightsClick={handleNavigateToFlights} />
+      {view === 'home' && <Hero />}
       <main className="flex-grow container mx-auto px-4 py-8">
-        {renderView()}
+        {renderMainContent()}
       </main>
       <Footer onAboutClick={handleNavigateToAbout} />
       <Chatbot />

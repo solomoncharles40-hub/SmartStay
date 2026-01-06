@@ -19,20 +19,18 @@ const PopularRoutesWidgetComponent: React.FC = () => {
 
     return (
         <section id="popular-routes" className="py-12 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-            <div className="container mx-auto px-6">
-                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
-                    Popular Flight Deals
-                </h2>
-                <div className="w-full max-w-6xl mx-auto h-[400px]">
-                     <iframe
-                        srcDoc={iframeContent}
-                        title="Popular Flight Routes"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-                    />
-                </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
+                Popular Flight Deals
+            </h2>
+            <div className="w-full max-w-6xl mx-auto h-[400px]">
+                    <iframe
+                    srcDoc={iframeContent}
+                    title="Popular Flight Routes"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 'none' }}
+                    sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                />
             </div>
         </section>
     );
