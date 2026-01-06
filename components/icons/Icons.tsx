@@ -143,12 +143,6 @@ export const SeatIcon: React.FC<IconProps> = (props) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6.375a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 0 10.5 4.125v4.5a1.125 1.125 0 0 0 1.125 1.125h.75m-1.125-4.5H3.375c0 8.25 6.75 11.25 11.25 11.25s11.25-3 11.25-11.25H10.5" />
     </svg>
 );
-
-export const BoltIcon: React.FC<IconProps> = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-    </svg>
-);
   
 export const NetworkIntelligenceIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>

@@ -21,15 +21,6 @@ export interface SearchParams {
   guests: string;
 }
 
-export interface FlightSearchParams {
-  departure: string;
-  destination: string;
-  departDate: string;
-  returnDate: string;
-  travelers: string;
-  flightClass: string;
-}
-
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
@@ -67,18 +58,4 @@ export interface AIDeal {
   description: string;
   price: number;
   dealHighlight: string;
-}
-
-export interface AIFlightDeal {
-  airline: string;
-  price: number;
-  dealHighlight: string;
-  stops: number;
-  flightDuration: string;
-}
-
-export interface FlightBookingDetails {
-  flight: AIFlightDeal;
-  flightParams: FlightSearchParams;
-  totalPrice: number;
 }

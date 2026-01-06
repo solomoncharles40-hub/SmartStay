@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
-import type { Hotel, FlightSearchParams, SearchParams, AIDeal, AIFlightDeal } from '../types';
+import type { Hotel, SearchParams, AIDeal } from '../types';
 
 // Lazily initialize the AI client to prevent app crash if API key is missing on load.
 let ai: GoogleGenAI | null = null;
@@ -169,50 +169,6 @@ export const planComplexItinerary = async (request: string): Promise<string> => 
         return "I'm sorry, I encountered an issue while planning your trip. Please try again.";
     }
 };
-
-export const generateAIFlightDeals = async (params: FlightSearchParams): Promise<AIFlightDeal[]> => {
-    const aiClient = getAiClient();
-    if (!aiClient) return [];
-
-    const prompt = `You are a creative travel deal finder for SmartStay. Based on the user's search for a flight from ${params.departure} to ${params.destination}, generate 3 unique, compelling, and fictional flight deals. The deals should represent different airlines and value propositions (e.g., one budget, one comfort, one direct). Provide a realistic airline name, a round-trip price, a catchy "deal highlight", the number of stops, and a flight duration for each.`;
-
-    try {
-        const response = await aiClient.models.generateContent({
-            model: 'gemini-3-flash-preview',
-            contents: prompt,
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: Type.OBJECT,
-                    properties: {
-                        deals: {
-                            type: Type.ARRAY,
-                            items: {
-                                type: Type.OBJECT,
-                                properties: {
-                                    airline: { type: Type.STRING },
-                                    price: { type: Type.INTEGER },
-                                    dealHighlight: { type: Type.STRING },
-                                    stops: { type: Type.INTEGER },
-                                    flightDuration: { type: Type.STRING }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        
-        const jsonStr = response.text.trim();
-        const parsed = JSON.parse(jsonStr);
-        return parsed.deals as AIFlightDeal[];
-
-    } catch (error) {
-        console.error("Error generating AI flight deals:", error);
-        return [];
-    }
-};
-
 
 export const generateAIDeals = async (params: SearchParams): Promise<AIDeal[]> => {
     const aiClient = getAiClient();

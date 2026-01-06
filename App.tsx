@@ -8,24 +8,20 @@ import { HotelDetail } from './components/HotelDetail';
 import { Chatbot } from './components/Chatbot';
 import { Booking } from './components/Booking';
 import { BookingConfirmation } from './components/BookingConfirmation';
-import { FlightBooking } from './components/FlightBooking';
-import { FlightBookingConfirmation } from './components/FlightBookingConfirmation';
-import { HomeIntro } from './components/HomeIntro';
 import { DealsSection } from './components/DealsSection';
 import { AboutUs } from './components/AboutUs';
 import { OffSeasonDeals } from './components/OffSeasonDeals';
 import { TravelpayoutsWidget } from './components/TravelpayoutsWidget';
-import type { Hotel, SearchParams, BookingDetails, AIDeal, AIFlightDeal, FlightSearchParams, FlightBookingDetails } from './types';
+import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'flightBooking' | 'flightConfirmation' | 'about'>('home');
+  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'about'>('home');
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
-  const [flightBookingDetails, setFlightBookingDetails] = useState<FlightBookingDetails | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Simulate a logged-in user
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -79,7 +75,6 @@ const App: React.FC = () => {
     setView('home');
     setSelectedHotel(null);
     setBookingDetails(null);
-    setFlightBookingDetails(null);
   }
 
   const handleNavigateToAbout = () => {
@@ -143,28 +138,8 @@ const App: React.FC = () => {
     setView('booking');
   };
 
-  const handleBookAIFlightDeal = (deal: AIFlightDeal, flightParams: FlightSearchParams) => {
-    const travelers = parseInt(flightParams.travelers, 10);
-    setFlightBookingDetails({
-      flight: deal,
-      flightParams,
-      totalPrice: deal.price * travelers,
-    });
-    setView('flightBooking');
-  };
-
-  const handleConfirmFlightBooking = () => {
-    setView('flightConfirmation');
-  };
-
-  const handleCancelFlightBooking = () => {
-    setFlightBookingDetails(null);
-    setView('home');
-  };
-
   const handleReturnHome = () => {
     setBookingDetails(null);
-    setFlightBookingDetails(null);
     setSelectedHotel(null);
     setView('home');
   };
@@ -204,22 +179,17 @@ const App: React.FC = () => {
         return bookingDetails && <Booking details={bookingDetails} onConfirm={handleConfirmBooking} onBack={handleCancelBooking} isLoggedIn={isLoggedIn} theme={theme} />;
       case 'confirmation':
         return bookingDetails && <BookingConfirmation details={bookingDetails} onGoHome={handleReturnHome} />;
-      case 'flightBooking':
-        return flightBookingDetails && <FlightBooking details={flightBookingDetails} onConfirm={handleConfirmFlightBooking} onBack={handleCancelFlightBooking} isLoggedIn={isLoggedIn} theme={theme} />;
-      case 'flightConfirmation':
-        return flightBookingDetails && <FlightBookingConfirmation details={flightBookingDetails} onGoHome={handleReturnHome} />;
       case 'about':
         return <AboutUs />;
       case 'home':
       default:
         return (
             <>
-              <Hero onSearch={handleSearch} onBookAIFlightDeal={handleBookAIFlightDeal} />
+              <Hero />
               <div className="my-16 space-y-16">
-                  <HomeIntro />
+                  <TravelpayoutsWidget />
                   <OffSeasonDeals onDealClick={handleDealClick} />
                   <DealsSection onDealClick={handleDealClick} />
-                  <TravelpayoutsWidget />
               </div>
             </>
         );
