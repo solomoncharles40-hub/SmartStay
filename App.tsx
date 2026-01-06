@@ -12,6 +12,7 @@ import { DealsSection } from './components/DealsSection';
 import { AboutUs } from './components/AboutUs';
 import { OffSeasonDeals } from './components/OffSeasonDeals';
 import { TravelpayoutsWidget } from './components/TravelpayoutsWidget';
+import { DealMap } from './components/DealMap';
 import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
@@ -101,8 +102,9 @@ const App: React.FC = () => {
     setView('detail');
   };
 
-  const handleBookAIDeal = (deal: AIDeal, searchParams: SearchParams, imageUrl: string) => {
-    const { location, checkIn, checkOut, guests } = searchParams;
+  // Fix: Renamed the 'searchParams' parameter to 'dealSearchParams' to avoid conflict with the component's state variable.
+  const handleBookAIDeal = (deal: AIDeal, dealSearchParams: SearchParams, imageUrl: string) => {
+    const { location, checkIn, checkOut, guests } = dealSearchParams;
     if (!checkIn || !checkOut) {
         alert("Please select check-in and check-out dates to book an AI deal.");
         return;
@@ -187,9 +189,10 @@ const App: React.FC = () => {
             <>
               <Hero />
               <div className="my-16 space-y-16">
-                  <TravelpayoutsWidget />
+                  <TravelpayoutsWidget onDealClick={handleDealClick} />
                   <OffSeasonDeals onDealClick={handleDealClick} />
                   <DealsSection onDealClick={handleDealClick} />
+                  <DealMap />
               </div>
             </>
         );

@@ -1,48 +1,53 @@
 
-import React, { useEffect, useRef, memo } from 'react';
+import React, { memo } from 'react';
 
-const TravelpayoutsWidgetComponent: React.FC = () => {
-    const widgetContainerRef = useRef<HTMLDivElement>(null);
+interface PopularDestination {
+  name: string;
+  price: number;
+  imageUrl: string;
+}
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        
-        script.src = 'https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&target_host=www.aviasales.com%2Fsearch&locale=en&limit=4&powered_by=false&primary=%230085FF&promo_id=4044&campaign_id=100';
-        script.async = true;
-        script.charset = 'utf-8';
+const destinations: PopularDestination[] = [
+  { name: 'Turkey', price: 479, imageUrl: 'https://picsum.photos/seed/istanbul-turkey/800/600' },
+  { name: 'Spain', price: 419, imageUrl: 'https://picsum.photos/seed/barcelona-spain/800/600' },
+  { name: 'Egypt', price: 580, imageUrl: 'https://picsum.photos/seed/giza-pyramids/800/600' },
+  { name: 'Manila', price: 399, imageUrl: 'https://picsum.photos/seed/manila-philippines/800/600' },
+  { name: 'Rome', price: 499, imageUrl: 'https://picsum.photos/seed/rome-italy/800/600' },
+  { name: 'Barbados', price: 620, imageUrl: 'https://picsum.photos/seed/barbados-beach/800/600' },
+  { name: 'Saint Lucia', price: 529, imageUrl: 'https://picsum.photos/seed/st-lucia/800/600' },
+  { name: 'Italy', price: 510, imageUrl: 'https://picsum.photos/seed/amalfi-coast/800/600' },
+  { name: 'Greece', price: 549, imageUrl: 'https://picsum.photos/seed/santorini-greece/800/600' },
+  { name: 'France', price: 500, imageUrl: 'https://picsum.photos/seed/paris-france/800/600' },
+];
 
-        const container = widgetContainerRef.current;
-        if (!container) {
-            return;
-        }
+interface TravelpayoutsWidgetProps {
+    onDealClick: (location: string) => void;
+}
 
-        // Append the script to let it initialize.
-        container.appendChild(script);
-
-        return () => {
-            // On cleanup, robustly clear the container of any content the script may have added.
-            // This is crucial for React's Strict Mode, which mounts/unmounts components twice in development,
-            // and ensures we don't have lingering widgets or multiple script instances.
-            if (container) {
-                container.innerHTML = ''; 
-            }
-        };
-    }, []);
-
+const TravelpayoutsWidgetComponent: React.FC<TravelpayoutsWidgetProps> = ({ onDealClick }) => {
     return (
-        <section id="travelpayouts" className="py-16">
+        <section id="popular-destinations" className="py-16">
             <div className="container mx-auto px-6">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
-                    Find More Deals
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-8">
+                    Popular Destinations
                 </h2>
-                <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-                    Can't find what you're looking for? Broaden your search with our partner for an extensive selection of flights, hotels, and car rentals worldwide.
-                </p>
-                <div 
-                    ref={widgetContainerRef} 
-                    className="max-w-4xl mx-auto min-h-[400px]"
-                >
-                    {/* The Aviasales widget will be loaded here */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    {destinations.map((deal) => (
+                        <div 
+                            key={deal.name} 
+                            onClick={() => onDealClick(deal.name)}
+                            className="group relative rounded-lg overflow-hidden shadow-lg cursor-pointer h-80"
+                        >
+                            <img src={deal.imageUrl} alt={deal.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div className="absolute bottom-0 left-0 p-4 text-white">
+                                <h3 className="text-xl font-bold">{deal.name}</h3>
+                                <p className="text-md font-semibold bg-blue-600 px-3 py-1 rounded-full inline-block mt-2">
+                                    From ${deal.price}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

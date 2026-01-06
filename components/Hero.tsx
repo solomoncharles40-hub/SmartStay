@@ -9,7 +9,7 @@ export const Hero: React.FC<HeroProps> = () => {
   useEffect(() => {
     const script = document.createElement('script');
     
-    script.src = 'https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&show_hotels=true&powered_by=false&locale=en&searchUrl=www.aviasales.com%2Fsearch&primary_override=%2332a8dd&color_button=%2332a8dd&color_icons=%2332a8dd&dark=%23262626&light=%23FFFFFF&secondary=%23FFFFFF&special=%23C4C4C4&color_focused=%2332a8dd&border_radius=0&plain=false&promo_id=7879&campaign_id=100';
+    script.src = 'https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&show_hotels=true&powered_by=false&locale=en&searchUrl=www.aviasales.com%2Fsearch&primary_override=%2332a8dd&color_button=%2332a8dd&color_icons=%2332a8dd&dark=%23262626&light=%23FFFFFF&secondary=%23FFFFFF&special=%23C4C4C4&color_focused=%2332a8dd&border_radius=0&plain=false&promo_id=7879&campaign_id=100&target_blank=true';
     script.async = true;
     script.charset = 'utf-8';
 
