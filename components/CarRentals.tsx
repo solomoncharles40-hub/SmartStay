@@ -1,30 +1,21 @@
 
-import React, { useEffect, useRef, memo } from 'react';
+import React, { memo } from 'react';
 
 const CarRentalsComponent: React.FC = () => {
-    const widgetContainerRef = useRef<HTMLDivElement>(null);
+    const widgetSrc = 'https://tpscr.com/content?trs=486598&shmarker=424483&locale=en&country=153&city=68511&powered_by=true&campaign_id=87&promo_id=2466';
 
-    useEffect(() => {
-        const script = document.createElement('script');
-        
-        script.src = 'https://tpscr.com/content?trs=486598&shmarker=424483&locale=en&country=153&city=68511&powered_by=true&campaign_id=87&promo_id=2466';
-        script.async = true;
-        script.charset = 'utf-8';
-
-        const container = widgetContainerRef.current;
-        if (!container) {
-            return;
-        }
-        
-        container.innerHTML = '';
-        container.appendChild(script);
-
-        return () => {
-            if (container) {
-                container.innerHTML = ''; 
-            }
-        };
-    }, []);
+    const iframeContent = `
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <style>body { margin: 0; overflow: hidden; }</style>
+            </head>
+            <body>
+                <script async src="${widgetSrc}" charset="utf-8"></script>
+            </body>
+        </html>
+    `;
 
     return (
         <section id="car-rentals" className="py-12 animate-fade-in">
@@ -36,10 +27,16 @@ const CarRentalsComponent: React.FC = () => {
                     Find the best deals on rental cars from top companies worldwide. Enter your destination and dates to get started.
                 </p>
                 <div 
-                    ref={widgetContainerRef} 
-                    className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg"
+                    className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 p-0 rounded-lg shadow-lg overflow-hidden h-[450px]"
                 >
-                    {/* The car rental widget will be loaded here */}
+                    <iframe
+                        srcDoc={iframeContent}
+                        title="Car Rentals"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none' }}
+                        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                    />
                 </div>
             </div>
         </section>
