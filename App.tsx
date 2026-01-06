@@ -12,11 +12,12 @@ import { AboutUs } from './components/AboutUs';
 import { DealMap } from './components/DealMap';
 import { PopularRoutesWidget } from './components/PopularRoutesWidget';
 import { CarRentals } from './components/CarRentals';
+import { Flights } from './components/Flights';
 import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'about' | 'car-rentals'>('home');
+  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'about' | 'car-rentals' | 'flights'>('home');
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
@@ -84,6 +85,11 @@ const App: React.FC = () => {
 
   const handleNavigateToCarRentals = () => {
     setView('car-rentals');
+    window.scrollTo(0, 0);
+  };
+  
+  const handleNavigateToFlights = () => {
+    setView('flights');
     window.scrollTo(0, 0);
   };
 
@@ -189,6 +195,8 @@ const App: React.FC = () => {
         return <AboutUs />;
       case 'car-rentals':
         return <CarRentals />;
+      case 'flights':
+        return <Flights />;
       case 'home':
       default:
         return (
@@ -205,7 +213,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} onCarRentalsClick={handleNavigateToCarRentals} />
+      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} onCarRentalsClick={handleNavigateToCarRentals} onFlightsClick={handleNavigateToFlights} />
       <main className="flex-grow container mx-auto px-4 py-8">
         {renderView()}
       </main>
