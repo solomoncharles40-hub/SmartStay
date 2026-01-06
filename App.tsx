@@ -10,6 +10,7 @@ import { Booking } from './components/Booking';
 import { BookingConfirmation } from './components/BookingConfirmation';
 import { AboutUs } from './components/AboutUs';
 import { DealMap } from './components/DealMap';
+import { PopularRoutesWidget } from './components/PopularRoutesWidget';
 import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
@@ -185,8 +186,9 @@ const App: React.FC = () => {
         return (
             <>
               <Hero />
-              <div className="mt-8 mb-16">
+              <div className="mt-8 mb-16 space-y-16">
                   <DealMap />
+                  <PopularRoutesWidget />
               </div>
             </>
         );
