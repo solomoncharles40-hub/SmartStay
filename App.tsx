@@ -201,7 +201,7 @@ const App: React.FC = () => {
       default:
         return (
             <>
-              <Hero onSearch={handleSearch} />
+              <Hero />
               <div className="mt-8 mb-16 space-y-16">
                   <DealMap />
                   <PopularRoutesWidget />
