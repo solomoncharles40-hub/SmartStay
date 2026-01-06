@@ -11,7 +11,6 @@ import { BookingConfirmation } from './components/BookingConfirmation';
 import { DealsSection } from './components/DealsSection';
 import { AboutUs } from './components/AboutUs';
 import { OffSeasonDeals } from './components/OffSeasonDeals';
-import { TravelpayoutsWidget } from './components/TravelpayoutsWidget';
 import { DealMap } from './components/DealMap';
 import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
@@ -190,7 +189,6 @@ const App: React.FC = () => {
               <Hero />
               <div className="mt-8 mb-16 space-y-16">
                   <DealMap />
-                  <TravelpayoutsWidget onDealClick={handleDealClick} />
                   <OffSeasonDeals onDealClick={handleDealClick} />
                   <DealsSection onDealClick={handleDealClick} />
               </div>
