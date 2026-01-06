@@ -1,29 +1,29 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 
-export const TravelpayoutsWidget: React.FC = () => {
+const TravelpayoutsWidgetComponent: React.FC = () => {
     const widgetContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const script = document.createElement('script');
         
-        // Activated with a valid affiliate marker.
-        script.src = '//www.travelpayouts.com/widgets/en/hotels.js?marker=549446&host=search.hotellook.com&locale=en&currency=usd&powered_by=true';
+        script.src = 'https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&target_host=www.aviasales.com%2Fsearch&locale=en&limit=4&powered_by=true&primary=%230085FF&promo_id=4044&campaign_id=100';
         script.async = true;
-        script.charset = 'UTF-8';
+        script.charset = 'utf-8';
 
         const container = widgetContainerRef.current;
-        if (container) {
-            container.appendChild(script);
+        if (!container) {
+            return;
         }
 
+        // Append the script to let it initialize.
+        container.appendChild(script);
+
         return () => {
-            if (container && container.contains(script)) {
-                container.removeChild(script);
-                // The widget might leave behind iframes or other elements. 
-                // A simple innerHTML clear is a robust way to clean up.
-                container.innerHTML = ''; 
-            }
+            // On cleanup, robustly clear the container of any content the script may have added.
+            // This is crucial for React's Strict Mode, which mounts/unmounts components twice in development,
+            // and ensures we don't have lingering widgets or multiple script instances.
+            container.innerHTML = ''; 
         };
     }, []);
 
@@ -31,18 +31,20 @@ export const TravelpayoutsWidget: React.FC = () => {
         <section id="travelpayouts" className="py-16">
             <div className="container mx-auto px-6">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 dark:text-gray-100 mb-2">
-                    Explore More Options
+                    Find the Cheapest Flights
                 </h2>
                 <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-                    Can't find what you're looking for? Broaden your search with our partner, Travelpayouts, for an extensive selection of hotels worldwide.
+                    Can't find what you're looking for? Broaden your search with our partner, Aviasales, for an extensive selection of flights worldwide.
                 </p>
                 <div 
                     ref={widgetContainerRef} 
-                    className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+                    className="max-w-4xl mx-auto"
                 >
-                    {/* The Travelpayouts widget will be loaded here */}
+                    {/* The Aviasales widget will be loaded here */}
                 </div>
             </div>
         </section>
     );
 };
+
+export const TravelpayoutsWidget = memo(TravelpayoutsWidgetComponent);

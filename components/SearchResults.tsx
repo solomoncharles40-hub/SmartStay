@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Hotel, SearchParams, AIDeal } from '../types';
 import { HotelCard } from './HotelCard';
 import { FilterSidebar } from './FilterSidebar';
@@ -23,7 +23,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHo
     setFilteredHotels(hotels);
   }, [hotels]);
 
-  const handleFilterChange = (filters: { price: number; rating: number; amenities: string[] }) => {
+  const handleFilterChange = useCallback((filters: { price: number; rating: number; amenities: string[] }) => {
     const updatedHotels = hotels.filter(hotel => {
       const priceMatch = hotel.pricePerNight <= filters.price;
       const ratingMatch = hotel.rating >= filters.rating;
@@ -31,7 +31,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ hotels, onSelectHo
       return priceMatch && ratingMatch && amenitiesMatch;
     });
     setFilteredHotels(updatedHotels);
-  };
+  }, [hotels]);
 
   return (
     <div className="flex flex-col md:flex-row gap-8">

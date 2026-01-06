@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { LockClosedIcon, CheckCircleIcon, ExclamationCircleIcon, CreditCardIcon, PayPalIcon } from './icons/Icons';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -145,14 +144,12 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
                     <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6 w-full">
                         <button
                             onClick={() => handlePaymentMethodChange('card')}
-                            disabled={paymentStatus === 'processing' || paymentStatus === 'successful'}
                             className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'card' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'} disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-500`}
                         >
                             Pay with Card
                         </button>
                         <button
                             onClick={() => handlePaymentMethodChange('paypal')}
-                            disabled={paymentStatus === 'processing' || paymentStatus === 'successful'}
                             className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'paypal' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'} disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-500`}
                         >
                             Pay with PayPal
