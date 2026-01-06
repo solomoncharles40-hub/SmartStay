@@ -7,9 +7,10 @@ interface HeaderProps {
     theme: 'light' | 'dark';
     toggleTheme: () => void;
     onAboutClick: () => void;
+    onCarRentalsClick: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme, onAboutClick }) => {
+export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme, onAboutClick, onCarRentalsClick }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogoClickAndCloseMenu = () => {
@@ -42,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
             <nav className="flex items-center gap-6 text-gray-600 dark:text-gray-300 font-medium">
               <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Stays</a>
               <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Flights</a>
-              <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Car Rentals</a>
+              <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Car Rentals</a>
             </nav>
             <div className="flex items-center gap-2">
                <button 
@@ -92,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Stays</a>
             <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Flights</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Car Rentals</a>
+            <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Car Rentals</a>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center px-5 space-x-2">

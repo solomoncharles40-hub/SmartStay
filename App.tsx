@@ -11,11 +11,12 @@ import { BookingConfirmation } from './components/BookingConfirmation';
 import { AboutUs } from './components/AboutUs';
 import { DealMap } from './components/DealMap';
 import { PopularRoutesWidget } from './components/PopularRoutesWidget';
+import { CarRentals } from './components/CarRentals';
 import type { Hotel, SearchParams, BookingDetails, AIDeal } from './types';
 import { hotels as mockHotels } from './data/mockData';
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'about'>('home');
+  const [view, setView] = useState<'home' | 'results' | 'detail' | 'booking' | 'confirmation' | 'about' | 'car-rentals'>('home');
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [searchResults, setSearchResults] = useState<Hotel[]>([]);
   const [searchParams, setSearchParams] = useState<SearchParams | null>(null);
@@ -78,6 +79,11 @@ const App: React.FC = () => {
 
   const handleNavigateToAbout = () => {
     setView('about');
+    window.scrollTo(0, 0);
+  };
+
+  const handleNavigateToCarRentals = () => {
+    setView('car-rentals');
     window.scrollTo(0, 0);
   };
 
@@ -181,6 +187,8 @@ const App: React.FC = () => {
         return bookingDetails && <BookingConfirmation details={bookingDetails} onGoHome={handleReturnHome} />;
       case 'about':
         return <AboutUs />;
+      case 'car-rentals':
+        return <CarRentals />;
       case 'home':
       default:
         return (
@@ -197,7 +205,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} />
+      <Header onLogoClick={handleLogoClick} theme={theme} toggleTheme={toggleTheme} onAboutClick={handleNavigateToAbout} onCarRentalsClick={handleNavigateToCarRentals} />
       <main className="flex-grow container mx-auto px-4 py-8">
         {renderView()}
       </main>
