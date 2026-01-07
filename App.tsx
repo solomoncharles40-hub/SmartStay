@@ -9,6 +9,7 @@ import { CarRentals } from './components/CarRentals';
 import { DealMap } from './components/DealMap';
 import { PopularRoutesWidget } from './components/PopularRoutesWidget';
 import { SearchBar } from './components/SearchBar';
+import { CarRentalWidget } from './components/CarRentalWidget';
 import { SparklesIcon, AirplaneIcon, SearchIcon } from './components/icons/Icons';
 
 const FeatureCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; delay: string }> = ({ title, desc, icon, delay }) => (
@@ -73,7 +74,6 @@ const App: React.FC = () => {
                 <Hero />
 
                 {/* Primary Search Bar - Positioned above 'The World Is On Sale' */}
-                {/* Removed 'container mx-auto' to allow the SearchBar component to use its full 1400px wide potential */}
                 <div className="relative z-30 w-full px-4 -mt-20 md:-mt-32 mb-12">
                     <SearchBar />
                 </div>
@@ -165,29 +165,45 @@ const App: React.FC = () => {
                 </section>
 
                 {/* Section 3: Car Rental Teaser */}
-                <section className="relative py-44 overflow-hidden group">
+                <section className="relative py-32 md:py-44 overflow-hidden group">
                     <img 
                         src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=2000"
                         alt="Road trip through tropical landscape"
-                        className="absolute top-0 left-0 w-full h-full object-cover z-0 brightness-75 group-hover:scale-105 transition-transform duration-[4s]"
+                        className="absolute top-0 left-0 w-full h-full object-cover z-0 brightness-[0.6] group-hover:scale-105 transition-transform duration-[4s]"
                     />
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-slate-950/95 via-slate-950/30 to-transparent z-10"></div>
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-950/40 to-slate-950/90 z-10"></div>
                     
                     <div className="container mx-auto px-4 relative z-20">
-                        <div className="max-w-2xl text-white">
-                            <span className="text-sky-400 font-black uppercase tracking-[0.5em] text-xs mb-8 block">Freedom Found</span>
-                            <h2 className="text-7xl md:text-9xl font-black tracking-tighter mb-10 leading-[0.75]">
-                                DRIVE INTO <br/> THE <span className="text-sky-400 italic">UNKNOWN.</span>
-                            </h2>
-                            <p className="text-2xl font-bold mb-14 text-gray-200 leading-relaxed italic max-w-lg">
-                                Complete your escape. Our premium fleet gives you the keys to hidden coves and mountain peaks.
-                            </p>
-                            <button 
-                                onClick={handleNavigateToCarRentals}
-                                className="px-14 py-7 bg-white text-slate-900 font-black rounded-3xl hover:bg-sky-400 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl uppercase tracking-[0.2em] text-sm"
-                            >
-                                EXPLORE RENTALS
-                            </button>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                            <div className="max-w-2xl text-white">
+                                <span className="text-sky-400 font-black uppercase tracking-[0.5em] text-xs mb-8 block">Freedom Found</span>
+                                <h2 
+                                    onClick={handleNavigateToCarRentals}
+                                    className="text-6xl md:text-9xl font-black tracking-tighter mb-10 leading-[0.75] cursor-pointer hover:text-sky-400 transition-colors"
+                                >
+                                    DRIVE INTO <br/> THE <span className="text-sky-400 italic">UNKNOWN.</span>
+                                </h2>
+                                <p className="text-2xl font-bold mb-14 text-gray-200 leading-relaxed italic max-w-lg">
+                                    Complete your escape. Our premium fleet gives you the keys to hidden coves and mountain peaks.
+                                </p>
+                                <button 
+                                    onClick={handleNavigateToCarRentals}
+                                    className="px-14 py-7 bg-white text-slate-900 font-black rounded-3xl hover:bg-sky-400 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-2xl uppercase tracking-[0.2em] text-sm"
+                                >
+                                    EXPLORE ALL RENTALS
+                                </button>
+                            </div>
+
+                            {/* Embedded Car Rental Search Widget for immediate use */}
+                            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl p-4 rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20">
+                                <div className="mb-4 flex items-center gap-3 px-4 pt-2">
+                                    <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Quick Fleet Access</span>
+                                </div>
+                                <div className="h-[400px]">
+                                    <CarRentalWidget height="400px" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
