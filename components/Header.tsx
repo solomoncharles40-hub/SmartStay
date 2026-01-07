@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { SparklesIcon, BuildingStorefrontIcon, SunIcon, MoonIcon, MenuIcon, CloseIcon } from './icons/Icons';
+import { BuildingStorefrontIcon, SunIcon, MoonIcon, MenuIcon, CloseIcon } from './icons/Icons';
 
 interface HeaderProps {
     onLogoClick: () => void;
@@ -25,6 +25,18 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
     setIsMobileMenuOpen(false);
   };
 
+  const scrollToMap = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    onLogoClick(); // Ensure we are on home view
+    setTimeout(() => {
+        const mapSection = document.getElementById('deal-map');
+        if (mapSection) {
+            mapSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 100);
+  };
+
   return (
     <header className="bg-white shadow-md sticky top-0 z-50 dark:bg-gray-800 dark:border-b dark:border-gray-700">
       <div className="container mx-auto px-4 py-3">
@@ -42,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
             <nav className="flex items-center gap-6 text-gray-600 dark:text-gray-300 font-medium">
-              <a href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Stays</a>
+              <a href="#" onClick={scrollToMap} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-bold text-blue-600 dark:text-blue-400">Deals Map</a>
               <a href="#" onClick={handleLinkClick(onFlightsClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Flights</a>
               <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Car Rentals</a>
             </nav>
@@ -92,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
       {isMobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Stays</a>
+            <a href="#" onClick={scrollToMap} className="block px-3 py-2 rounded-md text-base font-bold text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700">Deals Map</a>
             <a href="#" onClick={handleLinkClick(onFlightsClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Flights</a>
             <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Car Rentals</a>
           </div>
