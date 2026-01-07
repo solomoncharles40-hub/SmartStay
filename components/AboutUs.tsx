@@ -6,7 +6,7 @@ export const AboutUs: React.FC = () => {
   return (
     <div className="animate-fade-in">
       <h1 className="text-4xl font-extrabold text-center text-gray-900 dark:text-gray-100 mb-4">
-        Welcome to Smart<span className="text-blue-600 dark:text-blue-400">Stay</span>
+        Wander Far, Pay Less with Smart<span className="text-blue-600 dark:text-blue-400">Stay</span>
       </h1>
       <p className="text-lg text-center text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
         We are deploying cutting-edge AI to revolutionize how you discover, plan, and book your travels, making every trip smarter and more memorable.
