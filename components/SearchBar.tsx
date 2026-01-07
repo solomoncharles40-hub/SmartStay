@@ -48,17 +48,8 @@ const SearchBarComponent: React.FC = () => {
             
             <div className="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.2)] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-white/50 dark:border-gray-700 p-2 overflow-hidden transition-all duration-700 hover:scale-[1.01]">
                 
-                {/* Visual Metadata Label */}
-                <div className="absolute top-4 left-10 z-10 hidden lg:flex items-center gap-3">
-                    <div className="flex gap-1">
-                        <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-pulse"></div>
-                        <div className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-pulse delay-75"></div>
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 dark:text-gray-500">Multimodal Travel Index v4.2</span>
-                </div>
-
                 {/* The Search Widget Container */}
-                {/* Height increased to handle vertical expansion (date pickers, person selectors) */}
+                {/* Height configured to handle vertical expansion (date pickers, person selectors) */}
                 <div className="w-full h-[320px] md:h-[220px]">
                     <iframe
                         srcDoc={iframeContent}
