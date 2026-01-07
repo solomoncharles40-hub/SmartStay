@@ -5,7 +5,7 @@ const SearchBarComponent: React.FC = () => {
     // Exact script URL provided by the user
     const widgetSrc = "https://tpscr.com/content?currency=usd&trs=486598&shmarker=424483&show_hotels=true&powered_by=true&locale=en&searchUrl=www.aviasales.com%2Fsearch&primary_override=%2332a8dd&color_button=%2332a8dd&color_icons=%2332a8dd&dark=%23262626&light=%23FFFFFF&secondary=%23FFFFFF&special=%23C4C4C4&color_focused=%2332a8dd&border_radius=0&plain=false&promo_id=7879&campaign_id=100";
     
-    // We use a clean HTML structure inside the iframe to host the script
+    // Using a refined HTML structure for the search bar to maximize horizontal space and readability
     const iframeContent = `
         <!DOCTYPE html>
         <html lang="en">
@@ -20,9 +20,17 @@ const SearchBarComponent: React.FC = () => {
                         background: transparent; 
                         display: flex;
                         justify-content: center;
+                        align-items: flex-start;
+                        width: 100%;
                     }
-                    /* Customizing the injected widget container if necessary */
-                    #tp-widget-container { width: 100%; max-width: 1200px; }
+                    /* Ensure the widget spans the full container width for readability */
+                    #tp-widget-container { 
+                        width: 100%; 
+                        max-width: 100%;
+                        padding: 10px 0;
+                    }
+                    /* Specific fix for internal script padding */
+                    .tp-search-form { width: 100% !important; margin: 0 auto !important; }
                 </style>
             </head>
             <body>
@@ -34,20 +42,24 @@ const SearchBarComponent: React.FC = () => {
     `;
 
     return (
-        <div className="w-full max-w-6xl mx-auto group relative">
-            {/* Soft Glow/Shadow behind the search bar */}
-            <div className="absolute -inset-4 bg-sky-400/20 blur-3xl rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+        <div className="w-full max-w-[1400px] mx-auto group relative px-2">
+            {/* Background Glow Effect */}
+            <div className="absolute -inset-6 bg-sky-400/15 blur-[100px] rounded-[4rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
             
-            <div className="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-[2.5rem] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.4)] border border-white dark:border-gray-700 p-2 overflow-hidden transition-all duration-500 hover:shadow-[0_35px_80px_-20px_rgba(14,165,233,0.25)]">
+            <div className="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.2)] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-white/50 dark:border-gray-700 p-2 overflow-hidden transition-all duration-700 hover:scale-[1.01]">
                 
-                {/* Visual Label */}
-                <div className="absolute top-3 left-8 z-10 hidden md:flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-pulse"></div>
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-gray-500">Global Search Intelligence</span>
+                {/* Visual Metadata Label */}
+                <div className="absolute top-4 left-10 z-10 hidden lg:flex items-center gap-3">
+                    <div className="flex gap-1">
+                        <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-pulse"></div>
+                        <div className="w-1.5 h-1.5 bg-sky-400 rounded-full animate-pulse delay-75"></div>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 dark:text-gray-500">Multimodal Travel Index v4.2</span>
                 </div>
 
-                {/* The Widget Iframe */}
-                <div className="w-full h-[280px] md:h-[200px]">
+                {/* The Search Widget Container */}
+                {/* Height increased to handle vertical expansion (date pickers, person selectors) */}
+                <div className="w-full h-[320px] md:h-[220px]">
                     <iframe
                         srcDoc={iframeContent}
                         title="SmartStay Flights and Hotels Search"
@@ -55,9 +67,16 @@ const SearchBarComponent: React.FC = () => {
                         height="100%"
                         style={{ border: 'none' }}
                         sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-forms"
-                        className="rounded-[1.5rem]"
+                        className="rounded-[2rem]"
                     />
                 </div>
+            </div>
+            
+            {/* Quick helper labels below the bar for user UX */}
+            <div className="mt-4 flex justify-center gap-8 text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest opacity-60">
+                <span className="flex items-center gap-2"><div className="w-1 h-1 bg-sky-400 rounded-full"></div> Best Price Guarantee</span>
+                <span className="flex items-center gap-2"><div className="w-1 h-1 bg-sky-400 rounded-full"></div> Verified Partners</span>
+                <span className="flex items-center gap-2"><div className="w-1 h-1 bg-sky-400 rounded-full"></div> 24/7 AI Support</span>
             </div>
         </div>
     );

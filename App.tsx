@@ -73,7 +73,8 @@ const App: React.FC = () => {
                 <Hero />
 
                 {/* Primary Search Bar - Positioned above 'The World Is On Sale' */}
-                <div className="relative z-30 container mx-auto px-4 -mt-20 md:-mt-28 mb-12">
+                {/* Removed 'container mx-auto' to allow the SearchBar component to use its full 1400px wide potential */}
+                <div className="relative z-30 w-full px-4 -mt-20 md:-mt-32 mb-12">
                     <SearchBar />
                 </div>
                 
