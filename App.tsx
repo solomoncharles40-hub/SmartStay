@@ -8,6 +8,7 @@ import { AboutUs } from './components/AboutUs';
 import { CarRentals } from './components/CarRentals';
 import { DealMap } from './components/DealMap';
 import { PopularRoutesWidget } from './components/PopularRoutesWidget';
+import { SearchBar } from './components/SearchBar';
 import { SparklesIcon, AirplaneIcon, SearchIcon } from './components/icons/Icons';
 
 const FeatureCard: React.FC<{ title: string; desc: string; icon: React.ReactNode; delay: string }> = ({ title, desc, icon, delay }) => (
@@ -70,6 +71,11 @@ const App: React.FC = () => {
         return (
             <div className="flex flex-col">
                 <Hero />
+
+                {/* Search Bar Transition Area */}
+                <div className="relative z-30 container mx-auto px-4 -mt-16 md:-mt-24">
+                    <SearchBar />
+                </div>
                 
                 {/* Section 1: The World Is On Sale - Interactive Map Container */}
                 <section id="deals" className="py-24 md:py-32 bg-white dark:bg-gray-900 relative">
