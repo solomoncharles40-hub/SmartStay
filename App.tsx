@@ -104,10 +104,10 @@ const App: React.FC = () => {
                         </div>
 
                         {/* Supporting Popular Routes Grid */}
-                        <div className="mt-24">
-                            <div className="flex items-center gap-6 mb-10">
-                                <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Fast-Tracking Popular Escapes</h3>
-                                <div className="flex-grow h-px bg-slate-100 dark:bg-slate-800"></div>
+                        <div className="mt-32">
+                            <div className="flex flex-col md:flex-row items-baseline gap-4 mb-12">
+                                <h3 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Fast-Tracking Popular Escapes</h3>
+                                <p className="text-sky-600 font-bold italic">Curated by our live intelligence engine</p>
                             </div>
                             <PopularRoutesWidget />
                         </div>
