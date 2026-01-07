@@ -1,7 +1,7 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { LockClosedIcon, CheckCircleIcon, ExclamationCircleIcon, CreditCardIcon, PayPalIcon } from './icons/Icons';
+import { LockClosedIcon, CheckCircleIcon, ExclamationCircleIcon } from './icons/Icons';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 interface CheckoutFormProps {
     totalPrice: number;
@@ -11,11 +11,9 @@ interface CheckoutFormProps {
     theme: 'light' | 'dark';
 }
 
-export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchaseDescription, onConfirm, isLoggedIn, theme }) => {
+export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, onConfirm, isLoggedIn, theme }) => {
     const stripe = useStripe();
     const elements = useElements();
-    const [{ isPending: isPaypalLoading }] = usePayPalScriptReducer();
-    const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal'>('card');
     const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'successful' | 'failed'>('idle');
     const [error, setError] = useState<string | null>(null);
     const [formState, setFormState] = useState({ name: '', email: '' });
@@ -33,17 +31,17 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
     const cardElementOptions = {
         style: {
             base: {
-                color: theme === 'dark' ? '#fff' : '#32325d',
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                color: theme === 'dark' ? '#fff' : '#1a202c',
+                fontFamily: '"Inter", sans-serif',
                 fontSmoothing: "antialiased",
                 fontSize: "16px",
                 "::placeholder": {
-                    color: theme === 'dark' ? '#6b7280' : '#aab7c4',
+                    color: theme === 'dark' ? '#4a5568' : '#a0aec0',
                 },
             },
             invalid: {
-                color: "#fa755a",
-                iconColor: "#fa755a",
+                color: "#e53e3e",
+                iconColor: "#e53e3e",
             },
         },
     };
@@ -51,13 +49,6 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setFormState(prev => ({ ...prev, [id]: value }));
-    };
-
-    const handlePaymentMethodChange = (method: 'card' | 'paypal') => {
-        if (paymentStatus === 'processing' || paymentStatus === 'successful') return;
-        setPaymentMethod(method);
-        setError(null);
-        setPaymentStatus('idle');
     };
 
     const handleStripeSubmit = async (e: React.FormEvent) => {
@@ -73,12 +64,12 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
         const cardElement = elements.getElement(CardElement);
 
         if (!cardElement) {
-            setError("Card details not found.");
+            setError("Card component not initialized.");
             setPaymentStatus('failed');
             return;
         }
 
-        const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card: cardElement,
             billing_details: {
@@ -88,176 +79,108 @@ export const CheckoutForm: React.FC<CheckoutFormProps> = ({ totalPrice, purchase
         });
 
         if (error) {
-            // Show a specific, user-friendly error message from Stripe if available.
-            if (error.message) {
-                setError(error.message);
-            } else {
-                setError("An unexpected error occurred while processing your payment. Please try again.");
-            }
+            setError(error.message || "An unexpected error occurred.");
             setPaymentStatus('failed');
         } else {
-            if (savePaymentInfo) {
-                console.log('User opted to save card. Payment Method ID:', stripePaymentMethod.id);
-            }
             setPaymentStatus('successful');
             confirmationTimeoutRef.current = window.setTimeout(() => {
                 onConfirm();
-            }, 2000);
+            }, 1500);
         }
     };
-    
-    const handlePaypalApprove = (data: any, actions: any) => {
-        setPaymentStatus('processing');
-        setError(null);
-        return actions.order.capture().then((details: any) => {
-            if (savePaymentInfo) {
-                console.log('User opted to save PayPal for future payments. Payer ID:', details.payer.payer_id);
-            }
-            setPaymentStatus('successful');
-            confirmationTimeoutRef.current = window.setTimeout(() => {
-                onConfirm();
-            }, 2000);
-        }).catch((err: any) => {
-            console.error("PayPal Capture Error:", err);
-            setError("An error occurred with your PayPal payment. Please try again.");
-            setPaymentStatus('failed');
-        });
-    };
+
+    if (paymentStatus === 'successful') {
+        return (
+            <div className="flex flex-col items-center justify-center py-12 text-center animate-fade-in">
+                <CheckCircleIcon className="h-20 w-20 text-green-500 mb-6" />
+                <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 uppercase tracking-tight">Payment Success</h3>
+                <p className="text-gray-500 dark:text-gray-400 font-bold italic">Finalizing your booking details...</p>
+            </div>
+        );
+    }
+
+    if (paymentStatus === 'processing') {
+        return (
+            <div className="flex flex-col items-center justify-center py-12 text-center animate-fade-in">
+                <div className="relative w-20 h-20 mb-6">
+                    <div className="absolute inset-0 border-4 border-sky-100 dark:border-gray-700 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 uppercase tracking-tight">Processing</h3>
+                <p className="text-gray-500 dark:text-gray-400 font-bold italic">Communicating with secure servers...</p>
+            </div>
+        );
+    }
 
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col justify-center min-h-[450px]">
-             {paymentStatus === 'successful' ? (
-                <div className="text-center py-8 animate-fade-in">
-                    <CheckCircleIcon className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Payment Successful!</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mt-2">Please wait while we confirm your booking.</p>
+        <form onSubmit={handleStripeSubmit} className="space-y-6 animate-fade-in">
+            {paymentStatus === 'failed' && error && (
+                <div className="p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-2xl flex items-center gap-3 border border-red-100 dark:border-red-800">
+                    <ExclamationCircleIcon className="h-6 w-6 flex-shrink-0" />
+                    <span className="font-bold text-sm">{error}</span>
                 </div>
-            ) : paymentStatus === 'processing' ? (
-                 <div className="text-center py-8 animate-fade-in">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Processing Payment...</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mt-2">This may take a moment. Please don't close this window.</p>
-                </div>
-            ) : (
-                <>
-                    <h2 className="text-2xl font-bold mb-4 dark:text-gray-100 self-start">Secure Payment</h2>
-                    <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6 w-full">
-                        <button
-                            onClick={() => handlePaymentMethodChange('card')}
-                            className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'card' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'} disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-500`}
-                        >
-                            Pay with Card
-                        </button>
-                        <button
-                            onClick={() => handlePaymentMethodChange('paypal')}
-                            className={`flex-1 py-3 font-semibold text-center transition-colors ${paymentMethod === 'paypal' ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'} disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-500`}
-                        >
-                            Pay with PayPal
-                        </button>
-                    </div>
-
-                    {paymentStatus === 'failed' && error && (
-                        <div className="w-full mb-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2 dark:bg-red-900/30 dark:text-red-300 animate-fade-in">
-                            <ExclamationCircleIcon className="h-5 w-5 flex-shrink-0" />
-                            <span className="text-sm">{error}</span>
-                        </div>
-                    )}
-                    
-                    <div className="w-full">
-                        {paymentMethod === 'card' && (
-                            <form onSubmit={handleStripeSubmit} className="animate-fade-in">
-                                <div className="space-y-4">
-                                    <div>
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
-                                        <input type="text" id="name" value={formState.name} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                                        <input type="email" id="email" value={formState.email} onChange={handleInputChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Card Details</label>
-                                        <div className="mt-1 p-3 border border-gray-300 rounded-md shadow-sm min-h-[50px] flex items-center dark:border-gray-600">
-                                            {stripe && elements ? (
-                                                <div className="w-full">
-                                                    <CardElement options={cardElementOptions} />
-                                                </div>
-                                            ) : (
-                                                <div className="w-full flex items-center gap-3 animate-pulse">
-                                                    <CreditCardIcon className="w-10 h-7 text-gray-300 dark:text-gray-600" />
-                                                    <div className="flex-grow h-4 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <button
-                                    type="submit"
-                                    disabled={!stripe}
-                                    className="w-full mt-6 text-white font-bold py-3 px-4 rounded-lg transition-colors text-lg flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400"
-                                >
-                                    <LockClosedIcon className="h-5 w-5" aria-hidden="true" />
-                                    <span>Pay with Card (${totalPrice})</span>
-                                </button>
-                            </form>
-                        )}
-
-                        {paymentMethod === 'paypal' && (
-                            <div className="animate-fade-in">
-                                {isPaypalLoading ? (
-                                    <div className="space-y-3 animate-pulse pt-4">
-                                        <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                                            <PayPalIcon className="h-7 text-gray-400 dark:text-gray-500" />
-                                        </div>
-                                        <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                                            <CreditCardIcon className="h-7 text-gray-400 dark:text-gray-500" />
-                                        </div>
-                                    </div>
-                                 ) : (
-                                    <PayPalButtons
-                                        style={{ layout: "vertical", color: "blue" }}
-                                        createOrder={(data, actions) => {
-                                            setError(null);
-                                            setPaymentStatus('idle');
-                                            return actions.order.create({
-                                                purchase_units: [{
-                                                    description: purchaseDescription,
-                                                    amount: {
-                                                        value: totalPrice.toString(),
-                                                    },
-                                                }],
-                                            });
-                                        }}
-                                        onApprove={handlePaypalApprove}
-                                        onError={(err) => {
-                                            console.error("PayPal Button Error:", err);
-                                            setError("An error occurred with PayPal. Please check your details and try again.");
-                                            setPaymentStatus('failed');
-                                        }}
-                                    />
-                                )}
-                            </div>
-                        )}
-
-                        {isLoggedIn && (
-                            <div className="flex items-center mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                <input
-                                    id="save-payment"
-                                    name="save-payment"
-                                    type="checkbox"
-                                    checked={savePaymentInfo}
-                                    onChange={(e) => setSavePaymentInfo(e.target.checked)}
-                                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-500"
-                                />
-                                <label htmlFor="save-payment" className="ml-2 block text-sm text-gray-800 dark:text-gray-300">
-                                    Securely save my payment information for next time.
-                                </label>
-                            </div>
-                        )}
-                    </div>
-                </>
             )}
-        </div>
+
+            <div className="space-y-5">
+                <div>
+                    <label htmlFor="name" className="block text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Cardholder Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        value={formState.name} 
+                        onChange={handleInputChange} 
+                        required 
+                        placeholder="John Doe"
+                        className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold text-gray-900 dark:text-white transition-all"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="email" className="block text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Email for Receipt</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        value={formState.email} 
+                        onChange={handleInputChange} 
+                        required 
+                        placeholder="john@example.com"
+                        className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sky-500 font-bold text-gray-900 dark:text-white transition-all"
+                    />
+                </div>
+                <div>
+                    <label className="block text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Card Information</label>
+                    <div className="px-5 py-5 bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl transition-all">
+                        <CardElement options={cardElementOptions} />
+                    </div>
+                </div>
+            </div>
+
+            {isLoggedIn && (
+                <div className="flex items-center gap-3 py-2">
+                    <input
+                        id="save-card"
+                        type="checkbox"
+                        checked={savePaymentInfo}
+                        onChange={(e) => setSavePaymentInfo(e.target.checked)}
+                        className="w-5 h-5 rounded-md border-gray-300 text-sky-600 focus:ring-sky-500 dark:bg-gray-900 dark:border-gray-700"
+                    />
+                    <label htmlFor="save-card" className="text-sm font-bold text-gray-600 dark:text-gray-400 cursor-pointer">
+                        Securely save my card for future bookings
+                    </label>
+                </div>
+            )}
+
+            <button
+                type="submit"
+                disabled={!stripe}
+                className="w-full py-5 bg-sky-600 text-white font-black rounded-3xl hover:bg-sky-500 transition-all shadow-xl shadow-sky-600/20 active:scale-[0.98] disabled:bg-gray-400 flex items-center justify-center gap-3 text-lg tracking-tight"
+            >
+                <LockClosedIcon className="h-6 w-6" />
+                PAY ${totalPrice.toFixed(2)}
+            </button>
+            
+            <p className="text-center text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] pt-4">
+                Powered by Stripe • PCI Compliant
+            </p>
+        </form>
     );
 };
