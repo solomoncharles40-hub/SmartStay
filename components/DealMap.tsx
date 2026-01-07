@@ -8,9 +8,12 @@ const iframeContent = `
     <html>
         <head>
             <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <style>
                 body { margin: 0; padding: 0; overflow: hidden; background: transparent; display: flex; justify-content: center; align-items: center; height: 100vh; }
-                .widget-container { width: 100%; height: 100%; }
+                .widget-container { width: 100%; height: 100%; display: flex; justify-content: center; }
+                /* Ensure the script's injected container takes full height */
+                .tp-widget-wrapper { height: 100% !important; width: 100% !important; }
             </style>
         </head>
         <body>
@@ -23,14 +26,19 @@ const iframeContent = `
 
 const DealMapComponent: React.FC = () => {
     return (
-        <div className="w-full h-[450px] md:h-[650px] rounded-[3rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/50 dark:border-white/10 transition-all">
+        <div className="w-full h-[500px] md:h-[600px] lg:h-[700px] rounded-[3rem] overflow-hidden shadow-[0_32px_80px_-16px_rgba(14,165,233,0.3)] bg-white/40 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/50 dark:border-white/10 transition-all hover:shadow-sky-500/30">
             <iframe
                 srcDoc={iframeContent}
-                title="Global Flight Map"
+                title="Interactive Global Deal Map"
                 width="100%"
                 height="100%"
                 style={{ border: 'none' }}
-                sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-same-origin"
+                className="transition-opacity duration-700"
+                onLoad={(e) => {
+                    const target = e.target as HTMLIFrameElement;
+                    target.style.opacity = '1';
+                }}
             />
         </div>
     );
