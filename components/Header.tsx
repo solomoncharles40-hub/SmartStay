@@ -8,9 +8,11 @@ interface HeaderProps {
     toggleTheme: () => void;
     onAboutClick: () => void;
     onCarRentalsClick: () => void;
+    onTransfersClick: () => void;
+    onTaxiServiceClick: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme, onAboutClick, onCarRentalsClick }) => {
+export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme, onAboutClick, onCarRentalsClick, onTransfersClick, onTaxiServiceClick }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogoClickAndCloseMenu = () => {
@@ -41,8 +43,10 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
             <nav className="flex items-center gap-6 text-gray-600 dark:text-gray-300 font-medium">
-              <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Car Rentals</a>
-              <a href="#" onClick={handleLinkClick(onAboutClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+              <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors uppercase text-xs font-black tracking-widest">Car Rentals</a>
+              <a href="#" onClick={handleLinkClick(onTransfersClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors uppercase text-xs font-black tracking-widest">Transfers</a>
+              <a href="#" onClick={handleLinkClick(onTaxiServiceClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors uppercase text-xs font-black tracking-widest">Taxi Service</a>
+              <a href="#" onClick={handleLinkClick(onAboutClick)} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors uppercase text-xs font-black tracking-widest">About</a>
             </nav>
             <div className="flex items-center gap-2">
                <button 
@@ -91,6 +95,8 @@ export const Header: React.FC<HeaderProps> = ({ onLogoClick, theme, toggleTheme,
         <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="#" onClick={handleLinkClick(onCarRentalsClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Car Rentals</a>
+            <a href="#" onClick={handleLinkClick(onTransfersClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Transfers</a>
+            <a href="#" onClick={handleLinkClick(onTaxiServiceClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">Taxi Service</a>
             <a href="#" onClick={handleLinkClick(onAboutClick)} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 hover:bg-gray-50 dark:hover:text-white dark:hover:bg-gray-700">About</a>
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">

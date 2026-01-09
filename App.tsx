@@ -6,6 +6,8 @@ import { Hero } from './components/Hero';
 import { Chatbot } from './components/Chatbot';
 import { AboutUs } from './components/AboutUs';
 import { CarRentals } from './components/CarRentals';
+import { Transfers } from './components/Transfers';
+import { TaxiService } from './components/TaxiService';
 import { DealMap } from './components/DealMap';
 import { PopularRoutesWidget } from './components/PopularRoutesWidget';
 import { SearchBar } from './components/SearchBar';
@@ -28,7 +30,7 @@ const FeatureCard: React.FC<{ title: string; desc: string; icon: React.ReactNode
 );
 
 const App: React.FC = () => {
-  const [view, setView] = useState<'home' | 'about' | 'car-rentals'>('home');
+  const [view, setView] = useState<'home' | 'about' | 'car-rentals' | 'transfers' | 'taxi-service'>('home');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -63,6 +65,16 @@ const App: React.FC = () => {
 
   const handleNavigateToCarRentals = () => {
     setView('car-rentals');
+    window.scrollTo(0, 0);
+  };
+
+  const handleNavigateToTransfers = () => {
+    setView('transfers');
+    window.scrollTo(0, 0);
+  };
+
+  const handleNavigateToTaxiService = () => {
+    setView('taxi-service');
     window.scrollTo(0, 0);
   };
 
@@ -240,6 +252,10 @@ const App: React.FC = () => {
         return <AboutUs />;
       case 'car-rentals':
         return <CarRentals />;
+      case 'transfers':
+        return <Transfers />;
+      case 'taxi-service':
+        return <TaxiService />;
       default:
         return null;
     }
@@ -252,7 +268,9 @@ const App: React.FC = () => {
         theme={theme} 
         toggleTheme={toggleTheme} 
         onAboutClick={handleNavigateToAbout} 
-        onCarRentalsClick={handleNavigateToCarRentals} 
+        onCarRentalsClick={handleNavigateToCarRentals}
+        onTransfersClick={handleNavigateToTransfers}
+        onTaxiServiceClick={handleNavigateToTaxiService}
       />
       <main className="flex-grow">
         {renderMainContent()}
