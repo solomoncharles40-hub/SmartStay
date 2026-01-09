@@ -212,8 +212,9 @@ const App: React.FC = () => {
                                     <div className="w-2 h-2 bg-sky-500 rounded-full animate-ping"></div>
                                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Quick Fleet Access</span>
                                 </div>
-                                <div className="h-[400px]">
-                                    <CarRentalWidget height="400px" />
+                                {/* Increased teaser height to 600px for better visibility of initial car results */}
+                                <div className="h-[600px]">
+                                    <CarRentalWidget height="600px" />
                                 </div>
                             </div>
                         </div>

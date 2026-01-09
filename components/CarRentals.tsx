@@ -17,7 +17,8 @@ const CarRentalsComponent: React.FC = () => {
                 
                 <div className="w-full max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
                     <div className="p-2">
-                        <CarRentalWidget height="600px" />
+                        {/* Increased height to 900px for better visibility of all car pictures and details */}
+                        <CarRentalWidget height="900px" />
                     </div>
                 </div>
 
